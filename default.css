@@ -1,0 +1,51 @@
+a:visited {
+    color: -webkit-link;
+}
+
+body {
+    padding: 10%;
+    padding-top: 5%;
+    font-family: Georgia, Times, Times New Roman, sans-serif;
+    line-height: 140%;
+}
+
+*:focus {
+    outline: none;
+}
+
+button {
+    padding-top: 1ex;
+    padding-bottom: 1ex;
+    padding-left: 1.5ex;
+    padding-right: 1.5ex;
+    color: #00e;
+    background: #fff;
+    border: 1px solid #00e;
+    border-radius: 1ex;
+}
+
+button[disabled] {
+    color: #666;
+    border: 1px solid #666;
+}
+
+button#delete {
+    color: #f00;
+}
+
+article {
+    margin-bottom: 1ex;
+}
+
+nav {
+    margin-top: 5ex;
+    margin-left: -0.5ex
+}
+
+body > a:first-child {
+    display: block;
+    text-decoration: none;
+    font-size: 120%;
+    margin-left: -2ex;
+    margin-bottom: 1ex;
+}
