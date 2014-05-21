@@ -1,78 +1,58 @@
-from wsgiref.simple_server import make_server
-from string import Template
-import codecs
 import os
+import codecs
 
-empty_article = """\
-<h1>New page</h1>
-<div id="content">
-<p>…</p>
-</div>
-"""
+from flask import Flask, render_template, abort, request, Response
 
-template = Template("""\
-<!DOCTYPE html>
-<meta charset="utf-8">
-<title>title</title>
-<link rel="stylesheet" href="default.css">
-<body>
-<a href="/">☿ All pages</a>
-<article>
-${content}
-</article>
-<nav>
-<button type="submit" id="save">Save</button>
-<button disabled id="versions">Versions</button>
-<button disabled id="delete">Delete</button>
-</nav>
-<script src="app.js"></script>
-</body>
-""")
+app = Flask(__name__)
+debug = True if os.getenv('FLASK_ENV', 'production') == 'development' else False
+app.config.update(DATADIR='data', DEBUG=debug)
 
 
-def get_filename(environ):
-    path = environ['PATH_INFO'].strip('/')
-    if path in ('default.css', 'app.js'):
-        return path
-    else:
-        return path + '.html'
+@app.route('/', methods=['GET'])
+def index():
+    pages = [file[:-5] for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
+    return render_template('index.html', pages=pages)
 
 
-def write_file(environ):
-    body = environ['wsgi.input'].read(int(environ['CONTENT_LENGTH']))
-    filename = get_filename(environ)
-    with codecs.open(filename, 'w', 'utf-8') as page:
-        page.write(body.decode('utf-8').strip())
+@app.route('/<page>', methods=['GET'])
+def show_page(page):
+    try:
+        content = codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'r', 'utf-8').read()
+        return render_template('page.html', title=page, content=content)
+    except IOError:
+        return render_template('empty.html', title=page)
 
 
-def get_content(environ):
-    filename = get_filename(environ)
-    if filename == '.html':
-        return ('text/html', build_index().encode('utf-8'))
-    if filename.endswith('.html'):
+@app.route('/<page>', methods=['POST'])
+def create_page(page):
+    file = os.path.join(app.config['DATADIR'], page + '.html')
+    if os.path.exists(file):
+        response = Response(status=403)
+        response.headers['Allow'] = 'GET, PUT, DELETE, HEAD'
+        return response
+    with codecs.open(file, 'w', 'utf-8') as newpage:
         try:
-            content = codecs.open(filename, 'r', 'utf-8').read()
-            return ('text/html', template.substitute(content=content).encode('utf-8'))
+            newpage.write(request.form['content'])
+            response = Response('201 Created', status=201)
+            response.headers['Content-Type'] = 'text/plain; charset=utf-8'
+            response.headers['Location'] = '/' + page
+            return response
         except IOError:
-            return ('text/html', empty_article)
-    if filename.endswith('.css'):
-        return ('text/css', codecs.open(filename, 'r', 'utf-8').read().encode('utf-8'))
-    if filename.endswith('.js'):
-        return ('text/javascript', codecs.open(filename, 'r', 'utf-8').read().encode('utf-8'))
+            abort(500)
 
 
-def build_index():
-    content = '<br>'.join(['<a href="{file}">{file}</a>'.format(file=file[:-5]) for file in os.listdir('.') if file.endswith('.html')])
-    return template.substitute(content=content)
+@app.route('/<page>', methods=['PUT'])
+def update_page(page):
+    file = os.path.join(app.config['DATADIR'], page + '.html')
+    if not os.path.exists(file):
+        abort(404)
+    with codecs.open(file, 'w', 'utf-8') as newpage:
+        try:
+            newpage.write(request.form['content'])
+            return Response(status=204)
+        except IOError:
+            abort(500)
 
-
-def wiki(environ, start_response):
-    if environ['REQUEST_METHOD'].upper() == 'POST':
-        write_file(environ)
-    content = get_content(environ)
-    start_response('200 OK', [('Content-Type', content[0])])
-    return [content[1]]
 
 if __name__ == '__main__':
-    srv = make_server('localhost', 5000, wiki)
-    srv.serve_forever()
+    app.run(host='0.0.0.0')
