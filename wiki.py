@@ -1,7 +1,7 @@
 import os
 import codecs
 
-from flask import Flask, render_template, abort, request, make_response
+from flask import Flask, render_template, abort, request, Response
 
 app = Flask(__name__)
 debug = True if os.getenv('FLASK_ENV', 'production') == 'development' else False
@@ -25,10 +25,31 @@ def show_page(page):
 
 @app.route('/<page>', methods=['POST'])
 def create_page(page):
-    with codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'w', 'utf-8') as newpage:
+    file = os.path.join(app.config['DATADIR'], page + '.html')
+    if os.path.exists(file):
+        response = Response(status=403)
+        response.headers['Allow'] = 'GET, PUT, DELETE, HEAD'
+        return response
+    with codecs.open(file, 'w', 'utf-8') as newpage:
         try:
             newpage.write(request.form['content'])
-            return ('201 Created', 201, {'Content-Type': 'text/plain; charset=utf-8', 'Location': '/' + page})
+            response = Response('201 Created', status=201)
+            response.headers['Content-Type'] = 'text/plain; charset=utf-8'
+            response.headers['Location'] = '/' + page
+            return response
+        except IOError:
+            abort(500)
+
+
+@app.route('/<page>', methods=['PUT'])
+def update_page(page):
+    file = os.path.join(app.config['DATADIR'], page + '.html')
+    if not os.path.exists(file):
+        abort(404)
+    with codecs.open(file, 'w', 'utf-8') as newpage:
+        try:
+            newpage.write(request.form['content'])
+            return Response(status=204)
         except IOError:
             abort(500)
 

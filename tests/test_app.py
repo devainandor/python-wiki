@@ -33,3 +33,9 @@ class TestWiki:
         response = app.post('/Nonexisting', data={'content': content})
         filecontent = codecs.open('tests/data/Nonexisting.html', 'r', 'utf-8').read()
         assert filecontent == content
+
+    def test_page_should_update_existing_page(self, app):
+        content = '<h1>Updated</h1><div id="content"><p>with new content</p></div>'
+        response = app.put('/wiki', data={'content': content})
+        filecontent = codecs.open('tests/data/wiki.html', 'r', 'utf-8').read()
+        assert filecontent == content
