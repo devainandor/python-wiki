@@ -1,11 +1,11 @@
 import os
 import codecs
 
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, request, make_response
 
 app = Flask(__name__)
 debug = True if os.getenv('FLASK_ENV', 'production') == 'development' else False
-app.config.update(DATADIR='tests/data', DEBUG=debug)
+app.config.update(DATADIR='data', DEBUG=debug)
 
 
 @app.route('/', methods=['GET'])
@@ -23,5 +23,15 @@ def show_page(page):
         return render_template('empty.html', title=page)
 
 
+@app.route('/<page>', methods=['POST'])
+def create_page(page):
+    with codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'w', 'utf-8') as newpage:
+        try:
+            newpage.write(request.form['content'])
+            return ('201 Created', 201, {'Content-Type': 'text/plain; charset=utf-8', 'Location': '/' + page})
+        except IOError:
+            abort(500)
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
