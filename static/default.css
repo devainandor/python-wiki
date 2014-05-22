@@ -27,6 +27,12 @@ button {
 button[disabled] {
     color: #666;
     border: 1px solid #666;
+    display: none;
+}
+
+button:active {
+    background: #00e;
+    color: #fff;
 }
 
 button#delete {
