@@ -31,14 +31,11 @@ def create_page(page):
         response.headers['Allow'] = 'GET, PUT, DELETE, HEAD'
         return response
     with codecs.open(file, 'w', 'utf-8') as newpage:
-        try:
-            newpage.write(request.form['content'])
-            response = Response('201 Created', status=201)
-            response.headers['Content-Type'] = 'text/plain; charset=utf-8'
-            response.headers['Location'] = '/' + page
-            return response
-        except IOError:
-            abort(500)
+        newpage.write(request.form['content'])
+        response = Response('201 Created', status=201)
+        response.headers['Content-Type'] = 'text/plain; charset=utf-8'
+        response.headers['Location'] = '/' + page
+        return response
 
 
 @app.route('/<page>', methods=['PUT'])
@@ -47,11 +44,8 @@ def update_page(page):
     if not os.path.exists(file):
         abort(404)
     with codecs.open(file, 'w', 'utf-8') as newpage:
-        try:
-            newpage.write(request.form['content'])
-            return Response(status=204)
-        except IOError:
-            abort(500)
+        newpage.write(request.form['content'])
+        return Response(status=204)
 
 
 if __name__ == '__main__':
