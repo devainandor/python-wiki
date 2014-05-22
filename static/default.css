@@ -55,3 +55,7 @@ body > a:first-child {
     margin-left: -2ex;
     margin-bottom: 1ex;
 }
+
+[contenteditable=true] a:hover{
+    cursor: pointer;
+}

@@ -6,6 +6,8 @@ function handleDrag(event) {
 function insertFile(file) {
     var dataURI = file.target.result;
     var img = document.createElement("img");
+    var x = event.clientX;
+    var y = event.clientY;
     img.src = dataURI;
     // Back to 1999…
     // Firefox
@@ -28,8 +30,6 @@ function insertFile(file) {
 function handleDrop(event) {
     event.stopPropagation();
     event.preventDefault();
-    x = event.clientX;
-    y = event.clientY;
     var files = event.dataTransfer.files;
     for (var i = 0; i < files.length; i++) {
         file = files.item(i);

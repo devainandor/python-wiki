@@ -2,6 +2,11 @@
 
 {% block title %}{{title}}{% endblock %}
 
+{% block toolbar %}
+<nav>
+  <button id="link">Link</button>
+</nav>
+{% endblock %}
 {% block content %}
 {% autoescape false %}
 {{content}}
