@@ -47,3 +47,7 @@ class TestWiki:
     def test_should_not_update_nonexisting_page(self, app):
         response = app.put('/Nonexisting')
         assert response.status == '404 NOT FOUND'
+
+    def test_should_delete_existing_page(self, app):
+        response = app.delete('/wiki')
+        assert response.status == '204 NO CONTENT'

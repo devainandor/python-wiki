@@ -48,5 +48,14 @@ def update_page(page):
         return Response(status=204)
 
 
+@app.route('/<page>', methods=['DELETE'])
+def delete_page(page):
+    file = os.path.join(app.config['DATADIR'], page + '.html')
+    if not os.path.exists(file):
+        abort(404)
+    os.remove(file)
+    return Response(status=204)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

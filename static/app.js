@@ -21,3 +21,13 @@ saveButton.addEventListener('click', function() {
     request.send(formData);
     content.setAttribute('data-empty', 'false');
 });
+
+var deleteButton = document.getElementById('delete');
+deleteButton.addEventListener('click', function() {
+    var request = new XMLHttpRequest();
+    request.open('DELETE', document.URL);
+    request.send();
+    request.onload = function() {
+        window.location = '/';
+    };
+});
