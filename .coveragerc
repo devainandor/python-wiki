@@ -1,0 +1,10 @@
+[report]
+exclude_lines =
+    if __name__ == __main__:
+    import .*
+    @app.route.*
+    app = Flask\(__name__\) 
+    debug = True if os.getenv\('FLASK_ENV', 'production'\) == 'development' else False 
+    app.config.update\(DATADIR='data', DEBUG=debug\) 
+    if __name__ == '__main__': 
+    app.run\(host='0.0.0.0'\)
