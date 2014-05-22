@@ -11,7 +11,7 @@ app.config.update(DATADIR='data', DEBUG=debug)
 @app.route('/', methods=['GET'])
 def index():
     pages = [file[:-5] for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
-    return render_template('index.html', pages=pages)
+    return render_template('index.html', pages=sorted(pages))
 
 
 @app.route('/<page>', methods=['GET'])
