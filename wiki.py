@@ -31,7 +31,7 @@ def create_page(page):
         response.headers['Allow'] = 'GET, PUT, DELETE, HEAD'
         return response
     with codecs.open(file, 'w', 'utf-8') as newpage:
-        newpage.write(request.form['content'])
+        newpage.write(request.form['content'].strip())
         response = Response('201 Created', status=201)
         response.headers['Content-Type'] = 'text/plain; charset=utf-8'
         response.headers['Location'] = '/' + page
@@ -44,7 +44,7 @@ def update_page(page):
     if not os.path.exists(file):
         abort(404)
     with codecs.open(file, 'w', 'utf-8') as newpage:
-        newpage.write(request.form['content'])
+        newpage.write(request.form['content'].strip())
         return Response(status=204)
 
 
