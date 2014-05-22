@@ -3,3 +3,4 @@ data/
 tests/data/
 __pycache__/
 htmlcov/
+.coverage
