@@ -1,13 +1,19 @@
-var title = document.getElementsByTagName('h1')[0];
-title.contentEditable = true;
-var content = document.getElementById('content');
-content.contentEditable = true;
-
-content.addEventListener('click', function(event) {
-    if (event.target.tagName == 'A') {
-        window.location = event.target.getAttribute('href').toString();
-    }
-});
+function setEditable() {
+    var title = document.getElementsByTagName('h1')[0];
+    title.contentEditable = true;
+    var content = document.getElementById('content');
+    content.contentEditable = true;
+    content.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.target.tagName == 'A') {
+            saveArticle(function() {
+                window.location = event.target.getAttribute('href').toString();
+            });
+            return false;
+        }
+    });
+}
 
 function getMethod() {
     if (content.getAttribute('data-empty') === 'true') {
@@ -17,44 +23,67 @@ function getMethod() {
     }
 }
 
-var saveButton = document.getElementById('save');
-saveButton.addEventListener('click', function() {
+function saveArticle(callback) {
     var article = document.getElementsByTagName('article')[0];
+    var content = document.getElementById('content');
+    content.setAttribute('data-empty', 'false');
     var request = new XMLHttpRequest();
     request.open(getMethod(), document.URL);
-    content.setAttribute('data-empty', 'false');
     var formData = new FormData();
     formData.append('content', article.innerHTML);
+    if (callback) {
+        request.onload(callback());
+    }
     request.send(formData);
-});
+}
 
-var deleteButton = document.getElementById('delete');
-deleteButton.addEventListener('click', function() {
+function deleteArticle() {
     var request = new XMLHttpRequest();
     request.open('DELETE', document.URL);
     request.send();
     request.onload = function() {
         window.location = '/';
     };
-});
+}
 
-var linkButton = document.getElementById('link');
-linkButton.addEventListener('click', function() {
+function insertLink() {
     var selectedText = document.getSelection().toString();
     document.execCommand('createLink', true, selectedText);
-});
+}
 
-var listButton = document.getElementById('list');
-listButton.addEventListener('click', function() {
-    document.execCommand('insertUnorderedList');
-});
+function initEventHandlers() {
+    buttons = [
+        {
+            id: 'save',
+            action: saveArticle
+        },
+        {
+            id: 'delete',
+            action: deleteArticle
+        },
+        {
+            id: 'link',
+            action: insertLink
+        },
+        {
+            id: 'list',
+            action: function() {document.execCommand('insertUnorderedList');}
+        },
+        {
+            id: 'checkbox',
+            action: function() {document.execCommand('insertHTML', true, '<input type="checkbox">&nbsp;');}
+        },
+        {
+            id: 'del',
+            action: function() {document.execCommand('strikeThrough');}
+        }
+    ];
+    buttons.forEach(function(button) {
+        document.getElementById(button.id).addEventListener('click', button.action);
+    });
+}
 
-var checkboxButton = document.getElementById('checkbox');
-checkbox.addEventListener('click', function() {
-    document.execCommand('insertHTML', true, '<input type="checkbox">&nbsp;');
-});
-
-var delButton = document.getElementById('del');
-delButton.addEventListener('click', function() {
-    document.execCommand('strikeThrough');
-});
+window.onload = function() {
+    setEditable();
+    initEventHandlers();
+};
