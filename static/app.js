@@ -40,13 +40,21 @@ deleteButton.addEventListener('click', function() {
 
 var linkButton = document.getElementById('link');
 linkButton.addEventListener('click', function() {
-    var selection = document.getSelection();
-    var range = selection.getRangeAt(0);
-    var a = document.createElement('a');
-    var selectedText = selection.toString();
-    var text = document.createTextNode(selectedText);
-    a.appendChild(text);
-    a.setAttribute('href', '/' + selectedText);
-    range.deleteContents();
-    range.insertNode(a);
+    var selectedText = document.getSelection().toString();
+    document.execCommand('createLink', true, selectedText);
+});
+
+var listButton = document.getElementById('list');
+listButton.addEventListener('click', function() {
+    document.execCommand('insertUnorderedList');
+});
+
+var checkboxButton = document.getElementById('checkbox');
+checkbox.addEventListener('click', function() {
+    document.execCommand('insertHTML', true, '<input type="checkbox">&nbsp;');
+});
+
+var delButton = document.getElementById('del');
+delButton.addEventListener('click', function() {
+    document.execCommand('strikeThrough');
 });

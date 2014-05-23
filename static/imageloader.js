@@ -6,9 +6,9 @@ function handleDrag(event) {
 function insertFile(file) {
     var dataURI = file.target.result;
     var img = document.createElement("img");
+    img.src = dataURI;
     var x = event.clientX;
     var y = event.clientY;
-    img.src = dataURI;
     // Back to 1999…
     // Firefox
     if (document.caretPositionFromPoint) {

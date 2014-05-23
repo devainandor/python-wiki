@@ -3,8 +3,11 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block toolbar %}
-<nav>
-  <button id="link">Link</button>
+<nav class="toolbar">
+  <button id="link">→</button>
+  <button id="list">•</button>
+  <button id="del"><del>S</del></button>
+  <button id="checkbox">☑︎</button>
 </nav>
 {% endblock %}
 {% block content %}
