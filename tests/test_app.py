@@ -55,3 +55,9 @@ class TestWiki:
     def test_should_return_notfound_on_delete_nonexisting_page(self, app):
         response = app.delete('/Nonexisting')
         assert response.status == '404 NOT FOUND'
+
+    def test_should_find_file_by_content(self, app):
+        response = app.get('/search/ipsum')
+        page = response.data.decode('utf-8')
+        assert 'lorem' in page
+        assert 'wiki' not in page

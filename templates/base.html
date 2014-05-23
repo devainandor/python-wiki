@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="/static/default.css">
 <body>
 <a href="/">☿ All pages</a>
+<input id="search" type="search" placeholder="Search">
 {% block toolbar %}{% endblock %}
 <article>
 {% block content %}{% endblock %}
@@ -13,6 +14,7 @@
 <button disabled id="versions">Versions</button>
 <button id="delete">Delete</button>
 </nav>
-<script src="/static/app.js"></script>
-<script src="/static/imageloader.js"></script>
+<script src="/static/search.js"></script>
+{% block scripts %}
+{% endblock %}
 </body>

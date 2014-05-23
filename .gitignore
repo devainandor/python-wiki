@@ -4,3 +4,4 @@ tests/data/
 __pycache__/
 htmlcov/
 .coverage
+idx.db

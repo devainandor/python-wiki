@@ -1,11 +1,42 @@
 import os
 import codecs
+import sqlite3
 
-from flask import Flask, render_template, abort, request, Response
+from flask import Flask, render_template, abort, request, Response, g
 
 app = Flask(__name__)
 debug = True if os.getenv('FLASK_ENV', 'production') == 'development' else False
 app.config.update(DATADIR='data', DEBUG=debug)
+IDX = 'idx.db'
+
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(IDX)
+    return db
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+
+def build_index():
+    db = sqlite3.connect(IDX)
+    cursor = db.cursor()
+    cursor.execute('CREATE TABLE IF NOT EXISTS idx (filename text CONSTRAINT utext UNIQUE ON CONFLICT REPLACE, content text)')
+
+    def add_index(filename):
+        with codecs.open(os.path.join(app.config['DATADIR'], filename + '.html'), 'r', 'utf-8') as file:
+            content = file.read()
+            cursor.execute('INSERT OR REPLACE INTO idx VALUES (?, ?)', (filename, content))
+
+    [add_index(file[:-5]) for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
+    db.commit()
+    db.close()
 
 
 @app.route('/', methods=['GET'])
@@ -57,5 +88,12 @@ def delete_page(page):
     return Response(status=204)
 
 
+@app.route('/search/<query>', methods=['GET'])
+def search(query):
+    cursor = get_db().cursor()
+    pages = [row[0] for row in cursor.execute('SELECT filename FROM idx WHERE content LIKE ?', ('%' + query + '%',))]
+    return render_template('index.html', pages=sorted(pages))
+
 if __name__ == '__main__':
+    build_index()
     app.run(host='0.0.0.0')

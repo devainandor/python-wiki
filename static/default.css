@@ -40,6 +40,8 @@ button#delete {
 
 article {
     margin-bottom: 10px;
+    clear: both;
+    padding-top: 10px;
 }
 
 nav {
@@ -49,6 +51,7 @@ nav {
 
 body > a:first-child {
     display: block;
+    float: left;
     text-decoration: none;
     font-size: 120%;
     margin-left: -20px;
@@ -73,4 +76,8 @@ body > a:first-child {
     font-size: 100%;
     padding: 5px;
     margin-bottom: 5px;
+}
+
+[type=search] {
+    float: right;
 }
