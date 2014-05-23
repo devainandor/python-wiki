@@ -3,10 +3,10 @@ a:visited {
 }
 
 body {
-    padding: 10%;
-    padding-top: 5%;
+    padding: 60px;
+    padding-top: 25px;
     font-family: Georgia, Times, Times New Roman, sans-serif;
-    line-height: 140%;
+    line-height: 150%;
 }
 
 *:focus {
@@ -14,14 +14,13 @@ body {
 }
 
 button {
-    padding-top: 1ex;
-    padding-bottom: 1ex;
-    padding-left: 1.5ex;
-    padding-right: 1.5ex;
+    padding: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
     color: #00e;
     background: #fff;
     border: 1px solid #00e;
-    border-radius: 1ex;
+    border-radius: 8px;
 }
 
 button[disabled] {
@@ -40,20 +39,20 @@ button#delete {
 }
 
 article {
-    margin-bottom: 1ex;
+    margin-bottom: 10px;
 }
 
 nav {
-    margin-top: 5ex;
-    margin-left: -0.5ex
+    margin-top: 50px;
+    margin-left: 5px
 }
 
 body > a:first-child {
     display: block;
     text-decoration: none;
     font-size: 120%;
-    margin-left: -2ex;
-    margin-bottom: 1ex;
+    margin-left: -20px;
+    margin-bottom: 10px;
 }
 
 [contenteditable=true] a:hover{
@@ -62,12 +61,16 @@ body > a:first-child {
 
 .toolbar {
     position: fixed;
-    left: 4ex;
+    float: left;
+    left: 10px;
+    top: 75px;
 }
 
 .toolbar button {
     display: block;
-    width: 4ex;
+    width: 35px;
+    height: 35px;
     font-size: 100%;
-    padding: 0.5ex;
+    padding: 5px;
+    margin-bottom: 5px;
 }
