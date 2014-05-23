@@ -1,6 +1,7 @@
 import os
 import codecs
 import sqlite3
+import re
 
 from flask import Flask, render_template, abort, request, Response, g
 
@@ -8,6 +9,11 @@ app = Flask(__name__)
 debug = True if os.getenv('FLASK_ENV', 'production') == 'development' else False
 app.config.update(DATADIR='data', DEBUG=debug)
 IDX = 'idx.db'
+
+
+def striphtml(data):
+    p = re.compile(r'<.*?>')
+    return p.sub('', data)
 
 
 def get_db():
@@ -31,7 +37,7 @@ def build_index():
 
     def add_index(filename):
         with codecs.open(os.path.join(app.config['DATADIR'], filename + '.html'), 'r', 'utf-8') as file:
-            content = file.read()
+            content = striphtml(file.read())
             cursor.execute('INSERT OR REPLACE INTO idx VALUES (?, ?)', (filename, content))
 
     [add_index(file[:-5]) for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
