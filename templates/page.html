@@ -3,29 +3,36 @@
 <title>{{title}}</title>
 <link rel="stylesheet" href="/static/default.css">
 <body>
-<input id="search" type="search" placeholder="Search">
-<nav class="formatting toolbar">
-  <button id="link">→</button>
-  <button id="list">•</button>
-  <button id="del"><del>S</del></button>
-  <button id="checkbox">☑︎</button>
-</nav>
-<article>
-{% if content %}
-  {% autoescape false %}
-  {{content}}
-  {% endautoescape %}
-{% else %}
-  <h1>{{title}}</h1>
-  <div id="content" data-empty="true">
-  <p>…</p>
-  </div>
-{% endif %}
-</article>
-<nav class="pageactions toolbar">
-<button type="submit" id="save">Save</button>
-<button id="delete">Delete</button>
-</nav>
+<aside>
+  <input id="search" type="search" placeholder="Search">
+  <ul>
+    {% for page in pages %}
+      <a href="/{{page}}">{{page}}</a><br>
+    {% endfor %}
+  </ul>
+</aside>
+<section>
+  <nav class="toolbar">
+    <button id="link">→</button>
+    <button id="list">•</button>
+    <button id="del"><del>S</del></button>
+    <button id="checkbox">☑︎</button>
+    <button type="submit" id="save">Save</button>
+    <button id="delete">Delete</button>
+  </nav>
+  <article>
+  {% if content %}
+    {% autoescape false %}
+    {{content}}
+    {% endautoescape %}
+  {% else %}
+    <h1>{{title}}</h1>
+    <div id="content" data-empty="true">
+    <p>…</p>
+    </div>
+  {% endif %}
+  </article>
+</section>
 <script src="/static/search.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/imageloader.js"></script>
