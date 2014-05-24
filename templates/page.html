@@ -1,16 +1,17 @@
-{% extends 'base.html' %}
-
-{% block title %}{{title}}{% endblock %}
-
-{% block toolbar %}
-<nav class="toolbar">
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>{{title}}</title>
+<link rel="stylesheet" href="/static/default.css">
+<body>
+<a href="/">☿ All pages</a>
+<input id="search" type="search" placeholder="Search">
+<nav class="format-toolbar">
   <button id="link">→</button>
   <button id="list">•</button>
   <button id="del"><del>S</del></button>
   <button id="checkbox">☑︎</button>
 </nav>
-{% endblock %}
-{% block content %}
+<article>
 {% if content %}
   {% autoescape false %}
   {{content}}
@@ -21,8 +22,13 @@
   <p>…</p>
   </div>
 {% endif %}
-{% endblock %}
-{% block scripts %}
+</article>
+<nav>
+<button type="submit" id="save">Save</button>
+<button disabled id="versions">Versions</button>
+<button id="delete">Delete</button>
+</nav>
+<script src="/static/search.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/imageloader.js"></script>
-{% endblock %}
+</body>

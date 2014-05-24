@@ -58,7 +58,7 @@ def show_page(page=None):
         content = codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'r', 'utf-8').read()
     except IOError:
         content = None
-    return render_template('page.html', title=page, content=content)
+    return render_template('page.html', title=page, content=content, pages=get_pages())
 
 
 @app.route('/<page>', methods=['POST'])
