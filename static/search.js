@@ -1,10 +1,34 @@
-function doSearch(event) {
-    if (event.keyCode == '13') {
-        var query = event.target.value;
-        window.location = '/search/' + query;
+function showResults() {
+    result = JSON.parse(this.responseText);
+    var filelist = document.getElementById('pages');
+    for (var i=0; i<filelist.children.length; i++) {
+        var href = filelist.children[i].getAttribute('href');
+        if (href === undefined || href === null) {
+            continue;
+        }
+        if (result.pages.indexOf(href.substring(1)) > -1) {
+            filelist.children[i].className += ' highlighted';
+        }
     }
 }
 
-window.onload = function() {
-    document.getElementById('search').addEventListener('keypress', doSearch);
-};
+function clearResults() {
+    var filelist = document.getElementById('pages');
+    for (var i=0; i<filelist.children.length; i++) {
+        filelist.children[i].className = filelist.children[i].className.replace(' highlighted', '');
+    }
+}
+
+function doSearch(event) {
+    if (event.target.value === '') {
+        clearResults();
+        return;
+    }
+    var query = event.target.value;
+    var request = new XMLHttpRequest();
+    request.open('GET', '/search/' + query);
+    request.onload = showResults;
+    request.send();
+}
+
+document.getElementById('search').addEventListener('search', doSearch);

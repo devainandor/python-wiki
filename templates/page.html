@@ -5,7 +5,7 @@
 <body>
 <aside>
   <input id="search" type="search" placeholder="Search">
-  <ul>
+  <ul id="pages">
     {% for page in pages %}
       <a href="/{{page}}">{{page}}</a><br>
     {% endfor %}

@@ -66,3 +66,7 @@ article {
     margin: 15%;
     margin-left: 0;
 }
+
+.highlighted {
+    background: #ff0;
+}
