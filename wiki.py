@@ -45,19 +45,22 @@ def build_index():
     db.close()
 
 
+def get_pages():
+    return [file[:-5] for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
+
+
 @app.route('/', methods=['GET'])
 def index():
-    pages = [file[:-5] for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
-    return render_template('index.html', pages=sorted(pages))
+    return render_template('index.html', pages=sorted(get_pages()))
 
 
 @app.route('/<page>', methods=['GET'])
 def show_page(page):
     try:
         content = codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'r', 'utf-8').read()
-        return render_template('page.html', title=page, content=content)
     except IOError:
-        return render_template('empty.html', title=page)
+        content = None
+    return render_template('page.html', title=page, content=content)
 
 
 @app.route('/<page>', methods=['POST'])

@@ -11,9 +11,16 @@
 </nav>
 {% endblock %}
 {% block content %}
-{% autoescape false %}
-{{content}}
-{% endautoescape %}
+{% if content %}
+  {% autoescape false %}
+  {{content}}
+  {% endautoescape %}
+{% else %}
+  <h1>{{title}}</h1>
+  <div id="content" data-empty="true">
+  <p>…</p>
+  </div>
+{% endif %}
 {% endblock %}
 {% block scripts %}
 <script src="/static/app.js"></script>
