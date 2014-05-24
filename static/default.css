@@ -23,12 +23,6 @@ button {
     border-radius: 8px;
 }
 
-button[disabled] {
-    color: #666;
-    border: 1px solid #666;
-    display: none;
-}
-
 button:active {
     background: #00e;
     color: #fff;
@@ -62,14 +56,14 @@ body > a:first-child {
     cursor: pointer;
 }
 
-.toolbar {
+.formatting.toolbar {
     position: fixed;
     float: left;
     left: 10px;
     top: 75px;
 }
 
-.toolbar button {
+.formatting.toolbar button {
     display: block;
     width: 35px;
     height: 35px;
