@@ -50,12 +50,10 @@ def get_pages():
 
 
 @app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html', pages=sorted(get_pages()))
-
-
 @app.route('/<page>', methods=['GET'])
-def show_page(page):
+def show_page(page=None):
+    if page is None:
+        page = get_pages()[0]
     try:
         content = codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'r', 'utf-8').read()
     except IOError:
