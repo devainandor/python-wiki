@@ -8,6 +8,7 @@ function setEditable() {
         event.stopPropagation();
         if (event.target.tagName == 'A') {
             saveArticle(function() {
+                content.setAttribute('data-empty', 'false');
                 window.location = event.target.getAttribute('href').toString();
             });
             return false;
@@ -26,13 +27,12 @@ function getMethod() {
 function saveArticle(callback) {
     var article = document.getElementsByTagName('article')[0];
     var content = document.getElementById('content');
-    content.setAttribute('data-empty', 'false');
     var request = new XMLHttpRequest();
     request.open(getMethod(), document.URL);
     var formData = new FormData();
     formData.append('content', article.innerHTML);
     if (callback) {
-        request.onload(callback());
+        request.onload = callback;
     }
     request.send(formData);
 }

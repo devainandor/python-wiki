@@ -70,3 +70,7 @@ article {
 .highlighted {
     background: #ff0;
 }
+
+a:visited {
+    color: #00f;
+}

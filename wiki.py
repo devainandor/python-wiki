@@ -70,6 +70,7 @@ def create_page(page):
         return response
     with codecs.open(file, 'w', 'utf-8') as newpage:
         newpage.write(request.form['content'].strip())
+        build_index()
         response = Response('201 Created', status=201)
         response.headers['Content-Type'] = 'text/plain; charset=utf-8'
         response.headers['Location'] = '/' + page

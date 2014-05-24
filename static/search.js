@@ -1,4 +1,5 @@
 function showResults() {
+    clearResults();
     result = JSON.parse(this.responseText);
     var filelist = document.getElementById('pages');
     for (var i=0; i<filelist.children.length; i++) {
