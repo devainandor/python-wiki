@@ -3,7 +3,7 @@ import codecs
 import sqlite3
 import re
 
-from flask import Flask, render_template, abort, request, Response, g
+from flask import Flask, render_template, abort, request, Response, g, jsonify
 
 app = Flask(__name__)
 debug = True if os.getenv('FLASK_ENV', 'production') == 'development' else False
@@ -99,7 +99,7 @@ def delete_page(page):
 def search(query):
     cursor = get_db().cursor()
     pages = [row[0] for row in cursor.execute('SELECT filename FROM idx WHERE content LIKE ?', ('%' + query + '%',))]
-    return render_template('index.html', pages=sorted(pages))
+    return jsonify(pages=pages)
 
 if __name__ == '__main__':
     build_index()
