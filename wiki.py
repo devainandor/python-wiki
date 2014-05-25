@@ -6,8 +6,13 @@ import re
 from flask import Flask, render_template, abort, request, Response, g, jsonify
 
 app = Flask(__name__)
-debug = True if os.getenv('FLASK_ENV', 'production') == 'development' else False
-app.config.update(DATADIR='data', DEBUG=debug)
+if os.getenv('FLASK_ENV', 'production') == 'production':
+    debug = False
+    datadir = os.path.join(os.path.expanduser('~'), 'Dropbox/Wiki')
+else:
+    debug = True
+    datadir = 'data'
+app.config.update(DATADIR=datadir, DEBUG=debug)
 IDX = 'idx.db'
 
 
@@ -102,6 +107,18 @@ def search(query):
     pages = [row[0] for row in cursor.execute('SELECT filename FROM idx WHERE content LIKE ?', ('%' + query + '%',))]
     return jsonify(pages=pages)
 
+
+def set_default_page():
+    if not get_pages():
+        with codecs.open(os.path.join(app.config['DATADIR'], 'index.html'), 'w', 'utf-8') as index:
+            index.write("""\
+<h1>Index page</h1>
+    <div id="content">
+    <p>This is a placeholder page for your wiki.</p>
+    <p>See more info at <a href="https://github.com/devainandor/python-wiki">https://github.com/devainandor/python-wiki</a>.</p>
+""")
+
 if __name__ == '__main__':
+    set_default_page()
     build_index()
     app.run(host='0.0.0.0')
