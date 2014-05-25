@@ -3,7 +3,7 @@ import codecs
 import sqlite3
 import re
 
-from flask import Flask, render_template, abort, request, Response, g, jsonify
+from flask import Flask, render_template, abort, request, Response, g, jsonify, redirect, url_for
 
 app = Flask(__name__)
 if os.getenv('FLASK_ENV', 'production') == 'production':
@@ -55,10 +55,13 @@ def get_pages():
 
 
 @app.route('/', methods=['GET'])
+def index():
+    page = get_pages()[0]
+    return redirect(url_for('show_page', page=page))
+
+
 @app.route('/<page>', methods=['GET'])
-def show_page(page=None):
-    if page is None:
-        page = get_pages()[0]
+def show_page(page):
     try:
         content = codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'r', 'utf-8').read()
     except IOError:
