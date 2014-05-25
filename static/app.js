@@ -36,6 +36,26 @@ function saveArticle(async, callback) {
         request.onload = callback;
     }
     request.send(formData);
+    refreshSidebar();
+}
+
+function refreshSidebar() {
+    var request = new XMLHttpRequest();
+    request.open('GET', '/files');
+    request.onload = function() {
+        var linkList = document.getElementById('pages');
+        linkList.innerHTML = '';
+        // remove all links
+        response = JSON.parse(this.responseText);
+        response.pages.forEach(function(page) {
+            var a = document.createElement('a');
+            var text = document.createTextNode(page);
+            a.appendChild(text);
+            a.setAttribute('href', '/' + page);
+            linkList.appendChild(a);
+        });
+    };
+    request.send();
 }
 
 function deleteArticle() {

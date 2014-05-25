@@ -14,7 +14,7 @@ class TestWiki:
         [shutil.copy('tests/fixtures/' + file, 'tests/data') for file in listfiles('tests/fixtures')]
 
     def test_index_should_return_first_page(self, app):
-        response = app.get('/')
+        response = app.get('/', follow_redirects=True)
         page = response.data.decode('utf-8')
         assert '<h1>Lorem ipsum</h1>' in page
 
@@ -61,3 +61,8 @@ class TestWiki:
         result = response.data.decode('utf-8')
         assert 'lorem' in result
         assert 'wiki' not in result
+
+    def test_should_list_all_files(self, app):
+        response = app.get('/files')
+        result = response.data.decode('utf-8')
+        assert ('lorem' in result and 'wiki' in result)

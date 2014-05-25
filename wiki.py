@@ -56,7 +56,11 @@ def get_pages():
 
 @app.route('/', methods=['GET'])
 def index():
-    page = get_pages()[0]
+    try:
+        page = get_pages()[0]
+    except IndexError:
+        set_default_page()
+        page = 'index'
     return redirect(url_for('show_page', page=page))
 
 
@@ -111,13 +115,19 @@ def search(query):
     return jsonify(pages=pages)
 
 
+@app.route('/files', methods=['GET'])
+def list_files():
+    pages = get_pages()
+    return jsonify(pages=pages)
+
+
 def set_default_page():
     if not get_pages():
         with codecs.open(os.path.join(app.config['DATADIR'], 'index.html'), 'w', 'utf-8') as index:
             index.write("""\
 <h1>Index page</h1>
     <div id="content">
-    <p>This is a placeholder page for your wiki.</p>
+    <p>This is a placeholder page for your wiki. Click anywhere in the text or the title to edit. The default editing keybindings (bold, italic, undo etc.) work.</p>
     <p>See more info at <a href="https://github.com/devainandor/python-wiki">https://github.com/devainandor/python-wiki</a>.</p>
 """)
 
