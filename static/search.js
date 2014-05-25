@@ -4,11 +4,8 @@ function showResults() {
     var filelist = document.getElementById('pages');
     for (var i=0; i<filelist.children.length; i++) {
         var href = filelist.children[i].getAttribute('href');
-        if (href === undefined || href === null) {
-            continue;
-        }
-        if (result.pages.indexOf(href.substring(1)) > -1) {
-            filelist.children[i].className += ' highlighted';
+        if (result.pages.indexOf(href.substring(1)) == -1) {
+            filelist.children[i].style.visibility = 'hidden';
         }
     }
 }
@@ -16,7 +13,7 @@ function showResults() {
 function clearResults() {
     var filelist = document.getElementById('pages');
     for (var i=0; i<filelist.children.length; i++) {
-        filelist.children[i].className = filelist.children[i].className.replace(' highlighted', '');
+        filelist.children[i].style.visibility = 'visible';
     }
 }
 
