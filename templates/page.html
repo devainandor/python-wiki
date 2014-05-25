@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <title>{{title}}</title>
 <link rel="stylesheet" href="/static/default.css">
+<link rel="stylesheet" href="/static/iconfont.css">
 <body>
 <aside>
   <input id="search" type="search" placeholder="Search">
@@ -13,12 +14,12 @@
 </aside>
 <section>
   <nav class="toolbar">
-    <button id="link">→</button>
-    <button id="list">•</button>
-    <button id="del"><del>S</del></button>
-    <button id="checkbox">☑︎</button>
-    <button id="save">Save</button>
-    <button id="delete">Delete</button>
+    <button id="link" title="Insert link"><span class="icon-link"></span></button>
+    <button id="list" title="Insert bulleted list"><span class="icon-list"></span></button>
+    <button id="del" title="Strikethrough text"><span class="icon-strikethrough"></span></button>
+    <button id="checkbox" title="Insert checkbox"><span class="icon-checkbox-checked"></span></button>
+    <button id="save" title="Save"><span class="icon-checkmark"></span></button>
+    <button id="delete" title="Delete"><span class="icon-close"></span></button>
   </nav>
   <article>
   {% if content %}
