@@ -126,9 +126,10 @@ def set_default_page():
         with codecs.open(os.path.join(app.config['DATADIR'], 'index.html'), 'w', 'utf-8') as index:
             index.write("""\
 <h1>Index page</h1>
-    <div id="content">
-    <p>This is a placeholder page for your wiki. Click anywhere in the text or the title to edit. The default editing keybindings (bold, italic, undo etc.) work.</p>
-    <p>See more info at <a href="https://github.com/devainandor/python-wiki">https://github.com/devainandor/python-wiki</a>.</p>
+<div id="content">
+<p>This is a placeholder page for your wiki. Click anywhere in the text or the title to edit. The default editing keybindings (bold, italic, undo etc.) work.</p>
+<p>This wiki <strong>does not use versioning.</strong> Please use Dropbox or Time Machine for any valuable data.</p>
+<p>See more info at <a href="https://github.com/devainandor/python-wiki">https://github.com/devainandor/python-wiki</a>.</p>
 """)
 
 if __name__ == '__main__':
