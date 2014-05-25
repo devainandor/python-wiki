@@ -4,14 +4,8 @@ function setEditable() {
     var content = document.getElementById('content');
     content.contentEditable = true;
     content.addEventListener('click', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
         if (event.target.tagName == 'A') {
-            saveArticle(function() {
-                content.setAttribute('data-empty', 'false');
-                window.location = event.target.getAttribute('href').toString();
-            });
-            return false;
+            window.location = event.target.getAttribute('href').toString();
         }
     });
 }
@@ -24,11 +18,18 @@ function getMethod() {
     }
 }
 
-function saveArticle(callback) {
+function saveArticle(async, callback) {
+    if (async === null) {
+        async = true;
+    } else {
+        async = false;
+    }
+    var method = getMethod();
     var article = document.getElementsByTagName('article')[0];
     var content = document.getElementById('content');
     var request = new XMLHttpRequest();
-    request.open(getMethod(), document.URL);
+    request.open(method, document.URL, false);
+    content.setAttribute('data-empty', 'false');
     var formData = new FormData();
     formData.append('content', article.innerHTML);
     if (callback) {
@@ -87,3 +88,9 @@ window.onload = function() {
     setEditable();
     initEventHandlers();
 };
+
+this.onbeforeunload = checkBeforeUnload;
+
+function checkBeforeUnload() {
+    saveArticle(false);
+}
