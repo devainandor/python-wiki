@@ -8,15 +8,19 @@ function setEditable() {
             saveArticle(false, function() {
                 window.location = event.target.getAttribute('href').toString();
             });
-        } else if (event.target.tagName == 'INPUT' && event.target.type === 'checkbox') {
+        } else if (event.target.tagName == 'INPUT' && event.target.parentElement.tagName === 'LI') {
             setStrikethrough(event.target);
         }
     });
 }
 
 function setStrikethrough(target) {
-    if (event.target.checked) {
-        event.target.nextSibling.style.textDecoration = 'line-through';
+    if (target.checked) {
+        target.parentElement.style.textDecoration = 'line-through';
+        target.setAttribute('checked', 'checked');
+    } else {
+        target.parentElement.style.textDecoration = '';
+        target.removeAttribute('checked');
     }
 }
 
@@ -98,6 +102,8 @@ function ensureCheckboxPresent() {
         var node = document.getSelection().anchorNode.previousSibling;
         if (node.nodeName == 'INPUT') {
             node.parentElement.removeChild(node);
+            var p = document.createElement('p');
+            node.parentElement.appendChild(p);
         }
     }
 }
