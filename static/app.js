@@ -94,6 +94,11 @@ function inCheckboxList() {
 function ensureCheckboxPresent() {
     if (inCheckboxList()) {
         document.execCommand('insertHTML', true, '<input type="checkbox">&nbsp;');
+    } else {
+        var node = document.getSelection().anchorNode.previousSibling;
+        if (node.nodeName == 'INPUT') {
+            node.parentElement.removeChild(node);
+        }
     }
 }
 
