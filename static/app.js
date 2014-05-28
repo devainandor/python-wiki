@@ -5,9 +5,19 @@ function setEditable() {
     content.contentEditable = true;
     content.addEventListener('click', function(event) {
         if (event.target.tagName == 'A') {
-            window.location = event.target.getAttribute('href').toString();
+            saveArticle(false, function() {
+                window.location = event.target.getAttribute('href').toString();
+            });
+        } else if (event.target.tagName == 'INPUT' && event.target.type === 'checkbox') {
+            setStrikethrough(event.target);
         }
     });
+}
+
+function setStrikethrough(target) {
+    if (event.target.checked) {
+        event.target.nextSibling.style.textDecoration = 'line-through';
+    }
 }
 
 function getMethod() {
@@ -28,7 +38,7 @@ function saveArticle(async, callback) {
     var article = document.getElementsByTagName('article')[0];
     var content = document.getElementById('content');
     var request = new XMLHttpRequest();
-    request.open(method, document.URL, false);
+    request.open(method, document.URL, async);
     content.setAttribute('data-empty', 'false');
     var formData = new FormData();
     formData.append('content', article.innerHTML);
@@ -45,7 +55,6 @@ function refreshSidebar() {
     request.onload = function() {
         var linkList = document.getElementById('pages');
         linkList.innerHTML = '';
-        // remove all links
         response = JSON.parse(this.responseText);
         response.pages.forEach(function(page) {
             var a = document.createElement('a');
@@ -72,6 +81,41 @@ function insertLink() {
     document.execCommand('createLink', true, selectedText);
 }
 
+function inCheckboxList() {
+    var parentClasses = document.getSelection().anchorNode.parentElement.classList;
+    for (var i=0; i<parentClasses.length; i++) {
+        if (parentClasses[i] === 'checkbox') {
+            return true;
+        }
+    }
+    return false;
+}
+
+function ensureCheckboxPresent() {
+    if (inCheckboxList()) {
+        document.execCommand('insertHTML', true, '<input type="checkbox">&nbsp;');
+    }
+}
+
+function setCheckboxClass() {
+    var parentEl = document.getSelection().anchorNode.parentElement;
+    if (parentEl.tagName == 'UL') {
+        parentEl.classList.add('checkbox');
+    }
+}
+
+function insertCheckbox() {
+    document.execCommand('insertUnorderedList');
+    setCheckboxClass();
+    ensureCheckboxPresent();
+}
+
+function handleKeyUp(event) {
+    if (event.keyCode == 13) {
+        ensureCheckboxPresent();
+    }
+}
+
 function initEventHandlers() {
     buttons = [
         {
@@ -92,7 +136,7 @@ function initEventHandlers() {
         },
         {
             id: 'checkbox',
-            action: function() {document.execCommand('insertHTML', true, '<input type="checkbox">&nbsp;');}
+            action: insertCheckbox
         },
         {
             id: 'del',
@@ -102,6 +146,7 @@ function initEventHandlers() {
     buttons.forEach(function(button) {
         document.getElementById(button.id).addEventListener('click', button.action);
     });
+    window.addEventListener('keyup', handleKeyUp);
 }
 
 window.onload = function() {
