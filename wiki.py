@@ -96,6 +96,7 @@ def update_page(page):
         abort(404)
     with codecs.open(file, 'w', 'utf-8') as newpage:
         newpage.write(request.form['content'].strip())
+        build_index()
         return Response(status=204)
 
 
