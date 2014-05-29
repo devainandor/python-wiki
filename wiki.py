@@ -49,7 +49,7 @@ def build_index():
             content = striphtml(file.read())
             cursor.execute('INSERT OR REPLACE INTO idx VALUES (?, ?)', (page, content))
 
-    [add_index(file[:-5]) for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
+    [add_index(page) for page in get_pages()]
     db.commit()
     db.close()
 
@@ -91,14 +91,14 @@ def create_page(page):
     if os.path.exists(file):
         response = Response(status=403)
         response.headers['Allow'] = 'GET, PUT, DELETE, HEAD'
-        return response
-    with codecs.open(file, 'w', 'utf-8') as newpage:
-        newpage.write(request.form['content'].strip())
+    else:
+        with codecs.open(file, 'w', 'utf-8') as newpage:
+            newpage.write(request.form['content'].strip())
+            response = Response('201 Created', status=201)
+            response.headers['Content-Type'] = 'text/plain; charset=utf-8'
+            response.headers['Location'] = '/' + page
         build_index()
-        response = Response('201 Created', status=201)
-        response.headers['Content-Type'] = 'text/plain; charset=utf-8'
-        response.headers['Location'] = '/' + page
-        return response
+    return response
 
 
 @app.route('/<page>', methods=['PUT'])
