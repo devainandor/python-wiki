@@ -1,5 +1,5 @@
-var Editor = (function() {
-    
+CaduceusWiki.Editor = (function() {
+
     function setEditable() {
         var title = document.getElementsByTagName('h1')[0];
         title.contentEditable = true;
@@ -162,15 +162,15 @@ var Editor = (function() {
         window.addEventListener('keyup', handleKeyUp);
     }
 
-    window.onload = function() {
-        setEditable();
-        initEventHandlers();
+    return {
+        init: function() {
+            setEditable();
+            initEventHandlers();
+        },
+
+        checkBeforeUnload: function() {
+            saveArticle(false);
+        }
     };
-
-    this.onbeforeunload = checkBeforeUnload;
-
-    function checkBeforeUnload() {
-        saveArticle(false);
-    }
 
 })();

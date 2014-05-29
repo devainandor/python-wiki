@@ -1,4 +1,4 @@
-var Search = (function() {
+CaduceusWiki.Search = (function() {
 
     function showResults() {
         clearResults();
