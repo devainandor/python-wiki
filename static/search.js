@@ -5,7 +5,7 @@ function showResults() {
     for (var i=0; i<filelist.children.length; i++) {
         var href = filelist.children[i].getAttribute('href');
         if (result.pages.indexOf(href.substring(1)) == -1) {
-            filelist.children[i].style.visibility = 'hidden';
+            filelist.children[i].style.display = 'none';
         }
     }
 }
@@ -13,7 +13,7 @@ function showResults() {
 function clearResults() {
     var filelist = document.getElementById('pages');
     for (var i=0; i<filelist.children.length; i++) {
-        filelist.children[i].style.visibility = 'visible';
+        filelist.children[i].style.display = 'block';
     }
 }
 
