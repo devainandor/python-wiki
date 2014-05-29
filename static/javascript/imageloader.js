@@ -23,11 +23,15 @@ CaduceusWiki.ImageLoader = (function() {
         }
     }
 
-    ['dragenter', 'dragstart', 'dragend', 'dragleave', 'drag', 'dragover'].forEach(function(eventType) {
-        window.addEventListener(eventType, function(event) {
-            event.preventDefault();
-        });
-    });
-    window.addEventListener('drop', handleDrop);
+    return {
+        init: function() {
+            ['dragenter', 'dragstart', 'dragend', 'dragleave', 'drag', 'dragover'].forEach(function(eventType) {
+                window.addEventListener(eventType, function(event) {
+                    event.preventDefault();
+                });
+            });
+            window.addEventListener('drop', handleDrop);
+        }
+    };    
 
 })();

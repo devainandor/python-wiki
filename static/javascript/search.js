@@ -31,6 +31,10 @@ CaduceusWiki.Search = (function() {
         request.send();
     }
 
-    document.getElementById('search').addEventListener('search', doSearch);
+    return {
+        init: function() {
+            document.getElementById('search').addEventListener('search', doSearch);
+        }
+    };
     
 })();
