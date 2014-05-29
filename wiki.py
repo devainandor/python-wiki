@@ -35,17 +35,29 @@ def close_connection(exception):
         db.close()
 
 
+def get_filename(page):
+    return os.path.join(app.config['DATADIR'], page + '.html')
+
+
 def build_index():
     db = sqlite3.connect(IDX)
     cursor = db.cursor()
-    cursor.execute('CREATE TABLE IF NOT EXISTS idx (filename text CONSTRAINT utext UNIQUE ON CONFLICT REPLACE, content text)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS idx (page text CONSTRAINT utext UNIQUE ON CONFLICT REPLACE, content text)')
 
-    def add_index(filename):
-        with codecs.open(os.path.join(app.config['DATADIR'], filename + '.html'), 'r', 'utf-8') as file:
+    def add_index(page):
+        with codecs.open(get_filename(page), 'r', 'utf-8') as file:
             content = striphtml(file.read())
-            cursor.execute('INSERT OR REPLACE INTO idx VALUES (?, ?)', (filename, content))
+            cursor.execute('INSERT OR REPLACE INTO idx VALUES (?, ?)', (page, content))
 
     [add_index(file[:-5]) for file in os.listdir(app.config['DATADIR']) if file.endswith('.html')]
+    db.commit()
+    db.close()
+
+
+def remove_index(page):
+    db = sqlite3.connect(IDX)
+    cursor = db.cursor()
+    cursor.execute('DELETE FROM idx where page = ?', (page,))
     db.commit()
     db.close()
 
@@ -59,7 +71,7 @@ def index():
     try:
         page = get_pages()[0]
     except IndexError:
-        set_default_page()
+        create_default_page()
         page = 'index'
     return redirect(url_for('show_page', page=page))
 
@@ -67,7 +79,7 @@ def index():
 @app.route('/<page>', methods=['GET'])
 def show_page(page):
     try:
-        content = codecs.open(os.path.join(app.config['DATADIR'], page + '.html'), 'r', 'utf-8').read()
+        content = codecs.open(get_filename(page), 'r', 'utf-8').read()
     except IOError:
         content = None
     return render_template('page.html', title=page, content=content, pages=get_pages())
@@ -75,7 +87,7 @@ def show_page(page):
 
 @app.route('/<page>', methods=['POST'])
 def create_page(page):
-    file = os.path.join(app.config['DATADIR'], page + '.html')
+    file = get_filename(page)
     if os.path.exists(file):
         response = Response(status=403)
         response.headers['Allow'] = 'GET, PUT, DELETE, HEAD'
@@ -91,7 +103,7 @@ def create_page(page):
 
 @app.route('/<page>', methods=['PUT'])
 def update_page(page):
-    file = os.path.join(app.config['DATADIR'], page + '.html')
+    file = get_filename(page)
     if not os.path.exists(file):
         abort(404)
     with codecs.open(file, 'w', 'utf-8') as newpage:
@@ -102,17 +114,18 @@ def update_page(page):
 
 @app.route('/<page>', methods=['DELETE'])
 def delete_page(page):
-    file = os.path.join(app.config['DATADIR'], page + '.html')
+    file = get_filename(page)
     if not os.path.exists(file):
         abort(404)
     os.remove(file)
+    remove_index(page)
     return Response(status=204)
 
 
 @app.route('/search/<query>', methods=['GET'])
 def search(query):
     cursor = get_db().cursor()
-    pages = [row[0] for row in cursor.execute('SELECT filename FROM idx WHERE content LIKE ?', ('%' + query + '%',))]
+    pages = [row[0] for row in cursor.execute('SELECT page FROM idx WHERE content LIKE ?', ('%{}%'.format(query),))]
     return jsonify(pages=pages)
 
 
@@ -122,7 +135,7 @@ def list_files():
     return jsonify(pages=pages)
 
 
-def set_default_page():
+def create_default_page():
     if not get_pages():
         with codecs.open(os.path.join(app.config['DATADIR'], 'index.html'), 'w', 'utf-8') as index:
             index.write("""\
@@ -134,6 +147,6 @@ def set_default_page():
 """)
 
 if __name__ == '__main__':
-    set_default_page()
+    create_default_page()
     build_index()
     app.run(host='0.0.0.0')
