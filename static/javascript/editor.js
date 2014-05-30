@@ -87,54 +87,17 @@ CaduceusWiki.Editor = (function() {
         document.execCommand('createLink', true, selectedText);
     }
 
-    function inCheckboxList() {
-        var parentClasses = document.getSelection().anchorNode.parentElement.classList;
-        for (var i=0; i<parentClasses.length; i++) {
-            if (parentClasses[i] === 'checkbox') {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function ensureCheckboxPresent() {
-        if (inCheckboxList()) {
-            document.execCommand('insertHTML', true, '<input type="checkbox">&nbsp;');
+    function toggleBlock(tagName) {
+        var node = document.getSelection().anchorNode.parentElement;
+        if (node.tagName == tagName) {
+            document.execCommand('formatBlock', true, 'P');
         } else {
-            var node = document.getSelection().anchorNode.previousSibling;
-            if (node.nodeName == 'INPUT') {
-                node.parentElement.removeChild(node);
-                var p = document.createElement('p');
-                node.parentElement.appendChild(p);
-            }
-        }
-    }
-
-    function setCheckboxClass() {
-        var parentEl = document.getSelection().anchorNode.parentElement;
-        if (parentEl.tagName == 'UL') {
-            parentEl.classList.add('checkbox');
-        }
-    }
-
-    function insertCheckbox() {
-        document.execCommand('insertUnorderedList');
-        setCheckboxClass();
-        ensureCheckboxPresent();
-    }
-
-    function handleKeyUp(event) {
-        if (event.keyCode == 13) {
-            ensureCheckboxPresent();
+            document.execCommand('formatBlock', true, tagName);
         }
     }
 
     function initEventHandlers() {
         buttons = [
-            {
-                id: 'save',
-                action: saveArticle
-            },
             {
                 id: 'delete',
                 action: deleteArticle
@@ -148,12 +111,16 @@ CaduceusWiki.Editor = (function() {
                 action: function() {document.execCommand('insertUnorderedList');}
             },
             {
-                id: 'checkbox',
-                action: insertCheckbox
-            },
-            {
                 id: 'del',
                 action: function() {document.execCommand('strikeThrough');}
+            },
+            {
+                id: 'h2',
+                action: function() {toggleBlock('H2');}
+            },
+            {
+                id: 'blockquote',
+                action: function() {toggleBlock('BLOCKQUOTE');}
             }
         ];
         buttons.forEach(function(button) {

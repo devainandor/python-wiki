@@ -88,5 +88,18 @@ a:visited {
 }
 
 .checkbox {
+    padding-left: 20px;
     list-style-type: none;
+}
+
+h1 {
+    font-size: 140%;
+}
+
+h2 {
+    font-size: 120%;
+}
+
+blockquote {
+    font-style: italic;
 }

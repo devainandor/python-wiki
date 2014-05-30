@@ -26,18 +26,24 @@
 .icon-list:before {
     content: "\e600";
 }
+.icon-menu:before {
+    content: "\e603";
+}
 .icon-link:before {
     content: "\e601";
 }
 .icon-close:before {
     content: "\e602";
 }
-.icon-checkmark:before {
-    content: "\e603";
-}
 .icon-checkbox-checked:before {
     content: "\e604";
 }
+.icon-text-height:before {
+    content: "\e606";
+}
 .icon-strikethrough:before {
     content: "\e605";
+}
+.icon-indent-increase:before {
+    content: "\e607";
 }
