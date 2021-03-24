@@ -1,8 +1,4 @@
-.ve/
+.venv/
 data/
-tests/data/
-__pycache__/
-htmlcov/
-.coverage
 idx.db
-dist/
+.vscode/

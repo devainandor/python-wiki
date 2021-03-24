@@ -1,40 +1,36 @@
-CaduceusWiki.Search = (function() {
+export class Search {
+    constructor() {
+        document.querySelector('.search')
+            .addEventListener('search', this.doSearch.bind(this));
+        this.filelistEl = document.querySelector('.pages');
+    }
 
-    function showResults() {
-        clearResults();
-        result = JSON.parse(this.responseText);
-        var filelist = document.getElementById('pages');
-        for (var i=0; i<filelist.children.length; i++) {
-            var href = filelist.children[i].getAttribute('href');
+    showResults(request) {
+        this.clearResults();
+        const result = JSON.parse(request.responseText);
+        for (let i = 0; i < this.filelistEl.children.length; i++) {
+            const href = this.filelistEl.children[i].getAttribute('href');
             if (result.pages.indexOf(href.substring(1)) == -1) {
-                filelist.children[i].style.display = 'none';
+                this.filelistEl.children[i].style.display = 'none';
             }
         }
     }
 
-    function clearResults() {
-        var filelist = document.getElementById('pages');
-        for (var i=0; i<filelist.children.length; i++) {
-            filelist.children[i].style.display = 'block';
+    clearResults() {
+        for (let i = 0; i < this.filelistEl.children.length; i++) {
+            this.filelistEl.children[i].style.display = 'block';
         }
     }
 
-    function doSearch(event) {
+    doSearch(event) {
         if (event.target.value === '') {
-            clearResults();
+            this.clearResults();
             return;
         }
-        var query = event.target.value;
-        var request = new XMLHttpRequest();
-        request.open('GET', '/search/' + query);
-        request.onload = showResults;
+        const query = event.target.value;
+        const request = new XMLHttpRequest();
+        request.open('GET', '/search/' + query.replace('#', '%23'));
+        request.onload = this.showResults.bind(this, request);
         request.send();
     }
-
-    return {
-        init: function() {
-            document.getElementById('search').addEventListener('search', doSearch);
-        }
-    };
-    
-})();
+}

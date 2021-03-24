@@ -1,8 +1,13 @@
-var CaduceusWiki = {};
+import { Editor } from './editor.js';
+import { Search } from './search.js';
 
-window.onload = function() {
-    CaduceusWiki.Editor.init();
-    CaduceusWiki.ImageLoader.init();
-    CaduceusWiki.Search.init();
-    this.onbeforeunload = CaduceusWiki.Editor.checkBeforeUnload;
+class Wiki {
+    constructor() {
+        this.editor = new Editor();
+        this.search = new Search();
+    }
+}
+
+window.onload = () => {
+    const wiki = new Wiki();
 };

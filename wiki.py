@@ -42,12 +42,14 @@ def get_filename(page):
 def build_index():
     db = sqlite3.connect(IDX)
     cursor = db.cursor()
-    cursor.execute('CREATE TABLE IF NOT EXISTS idx (page text CONSTRAINT utext UNIQUE ON CONFLICT REPLACE, content text)')
+    cursor.execute(
+        'CREATE TABLE IF NOT EXISTS idx (page text CONSTRAINT utext UNIQUE ON CONFLICT REPLACE, content text)')
 
     def add_index(page):
         with codecs.open(get_filename(page), 'r', 'utf-8') as file:
             content = striphtml(file.read())
-            cursor.execute('INSERT OR REPLACE INTO idx VALUES (?, ?)', (page, content))
+            cursor.execute(
+                'INSERT OR REPLACE INTO idx VALUES (?, ?)', (page, content))
 
     [add_index(page) for page in get_pages()]
     db.commit()
@@ -107,7 +109,7 @@ def update_page(page):
     if not os.path.exists(file):
         abort(404)
     with codecs.open(file, 'w', 'utf-8') as newpage:
-        newpage.write(request.form['content'].strip())
+        newpage.write(request.form.get('content', '').strip())
         build_index()
         return Response(status=204)
 
@@ -125,7 +127,8 @@ def delete_page(page):
 @app.route('/search/<query>', methods=['GET'])
 def search(query):
     cursor = get_db().cursor()
-    pages = [row[0] for row in cursor.execute('SELECT page FROM idx WHERE content LIKE ?', ('%{}%'.format(query),))]
+    pages = [row[0] for row in cursor.execute(
+        'SELECT page FROM idx WHERE content LIKE ?', ('%{}%'.format(query),))]
     return jsonify(pages=pages)
 
 
@@ -137,16 +140,18 @@ def list_files():
 
 def create_default_page():
     if not get_pages():
-        with codecs.open(os.path.join(app.config['DATADIR'], 'index.html'), 'w', 'utf-8') as index:
+        with codecs.open(os.path.join(app.config['DATADIR'], 'Index.html'), 'w', 'utf-8') as index:
             index.write("""\
-<h1>Index page</h1>
-<div id="content">
+<h1>Index</h1>
+<section class="content">
 <p>This is a placeholder page for your wiki. Click anywhere in the text or the title to edit. The default editing keybindings (bold, italic, undo etc.) work.</p>
-<p>This wiki <strong>does not use versioning.</strong> Please use Dropbox or Time Machine for any valuable data.</p>
+<p>This wiki <strong>does not use versioning (yet).</strong> Please use Dropbox, Time Machine or any other versioning/backup solution for valuable data.</p>
 <p>See more info at <a href="https://github.com/devainandor/python-wiki">https://github.com/devainandor/python-wiki</a>.</p>
+</section>
 """)
+
 
 if __name__ == '__main__':
     create_default_page()
     build_index()
-    app.run(host='0.0.0.0')
+    app.run(host='localhost')

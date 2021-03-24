@@ -1,7 +1,7 @@
 body {
     padding: 0;
     margin: 0;
-    font-family: Georgia, Times, Times New Roman, sans-serif;
+    font-family: Georgia, Times, "Times New Roman", sans-serif;
     line-height: 150%;
 }
 
@@ -19,18 +19,18 @@ button {
     border-radius: 8px;
     height: 30px;
     line-height: 1px;
+
+    &:active {
+        background: #00e;
+        color: #fff;
+    }
+
+    &.delete {
+        color: #f00;
+    }
 }
 
-button:active {
-    background: #00e;
-    color: #fff;
-}
-
-button#delete {
-    color: #f00;
-}
-
-section {
+main {
     float: right;
     width: 70%;
 }
@@ -44,20 +44,15 @@ aside {
     width: 24%;
     padding: 3%;
     position: fixed;
+
+    ul {
+        padding: 0;
+    }
 }
 
-aside, 
+aside,
 .toolbar {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
-}
-
-aside ul {
-    padding: 0;
 }
 
 nav {
@@ -78,13 +73,15 @@ article {
     background: #ff0;
 }
 
-a, 
+a,
 a:visited {
     color: #00f;
 }
 
-#pages a {
-    display: block;
+.pages {
+    a {
+        display: block;
+    }
 }
 
 .checkbox {

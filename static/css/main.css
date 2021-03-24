@@ -1,0 +1,104 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Georgia, Times, "Times New Roman", sans-serif;
+  line-height: 150%;
+}
+
+*:focus {
+  outline: none;
+}
+
+button {
+  padding: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #00e;
+  background: #fff;
+  border: 1px solid #00e;
+  border-radius: 8px;
+  height: 30px;
+  line-height: 1px;
+}
+
+button:active {
+  background: #00e;
+  color: #fff;
+}
+
+button.delete {
+  color: #f00;
+}
+
+main {
+  float: right;
+  width: 70%;
+}
+
+a {
+  cursor: pointer;
+}
+
+aside {
+  float: left;
+  width: 24%;
+  padding: 3%;
+  position: fixed;
+}
+
+aside ul {
+  padding: 0;
+}
+
+aside,
+.toolbar {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+nav {
+  position: fixed;
+  padding-top: 3%;
+  padding-bottom: 1%;
+  background: #fff;
+  width: 100%;
+}
+
+article {
+  margin: 15%;
+  margin-left: 0;
+  margin-top: 12%;
+}
+
+.highlighted {
+  background: #ff0;
+}
+
+a,
+a:visited {
+  color: #00f;
+}
+
+.pages a {
+  display: block;
+}
+
+.checkbox {
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+h1 {
+  font-size: 140%;
+}
+
+h2 {
+  font-size: 120%;
+}
+
+blockquote {
+  font-style: italic;
+}
+/*# sourceMappingURL=main.css.map */
