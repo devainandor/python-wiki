@@ -120,7 +120,11 @@ def delete_page(page):
     file = get_filename(page)
     if not os.path.exists(file):
         abort(404)
-    os.remove(file)
+    trashdir = os.path.join(app.config['DATADIR'], '.deleted')
+    if not os.path.exists(trashdir):
+        os.mkdir(trashdir)
+    os.rename(file, os.path.join(
+        app.config['DATADIR'], '.deleted', page + '.html'))
     remove_index(page)
     return Response(status=204)
 
