@@ -1,0 +1,11 @@
+remove unnecessary items from toolbar
+
+update design
+
+add template chooser for new pages
+
+add map page
+
+update search results on type
+
+optimize index updates

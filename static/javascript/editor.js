@@ -8,10 +8,16 @@ export class Editor {
     }
 
     setEditable() {
-        const title = document.querySelector('h1');
-        title.contentEditable = true;
         this.contentEl.contentEditable = true;
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
+        const title = document.querySelector('h1');
+        title.contentEditable = true;
+        title.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                this.contentEl.focus();
+                event.preventDefault();
+            }
+        });
     }
 
     documentClickHandler(event) {
@@ -25,6 +31,7 @@ export class Editor {
         }
     }
 
+    // TODO: rename
     saveArticle(callback = null) {
         const method = this.getMethod();
         const article = document.querySelector('article');

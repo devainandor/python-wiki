@@ -1,4 +1,8 @@
+$bordercolor: hsl(0, 0%, 80%);
+
 body {
+    display: flex;
+    flex-direction: row;
     padding: 0;
     margin: 0;
     font-family: Georgia, Times, "Times New Roman", sans-serif;
@@ -16,9 +20,9 @@ button {
     color: #00e;
     background: #fff;
     border: 1px solid #00e;
-    border-radius: 8px;
+    border-radius: 4px;
     height: 30px;
-    line-height: 1px;
+    line-height: 1;
 
     &:active {
         background: #00e;
@@ -31,23 +35,19 @@ button {
 }
 
 main {
-    float: right;
     width: 70%;
 }
 
 a {
+    // for contenteditable links
     cursor: pointer;
 }
 
 aside {
-    float: left;
     width: 24%;
     padding: 3%;
-    position: fixed;
-
-    ul {
-        padding: 0;
-    }
+    // TODO:
+    // position: fixed;
 }
 
 aside,
@@ -67,6 +67,7 @@ article {
     margin: 15%;
     margin-left: 0;
     margin-top: 12%;
+    max-width: 40rem;
 }
 
 .highlighted {
@@ -79,6 +80,9 @@ a:visited {
 }
 
 .pages {
+    margin-left: 10px;
+    padding: 0;
+
     a {
         display: block;
     }
@@ -90,7 +94,9 @@ a:visited {
 }
 
 h1 {
+    border-bottom: 1px solid $bordercolor;
     font-size: 140%;
+    padding-bottom: 0.5rem;
 }
 
 h2 {
@@ -98,5 +104,15 @@ h2 {
 }
 
 blockquote {
+    background: hsla(45, 80%, 95%, 1);
+    border: 1px solid $bordercolor;
     font-style: italic;
+    margin: 1rem -1rem;
+    padding: 1rem;
+}
+
+.search {
+    height: 2rem;
+    -webkit-appearance: none;
+    border: 1px solid $bordercolor;
 }

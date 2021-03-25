@@ -1,4 +1,11 @@
 body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
   padding: 0;
   margin: 0;
   font-family: Georgia, Times, "Times New Roman", sans-serif;
@@ -16,9 +23,9 @@ button {
   color: #00e;
   background: #fff;
   border: 1px solid #00e;
-  border-radius: 8px;
+  border-radius: 4px;
   height: 30px;
-  line-height: 1px;
+  line-height: 1;
 }
 
 button:active {
@@ -31,7 +38,6 @@ button.delete {
 }
 
 main {
-  float: right;
   width: 70%;
 }
 
@@ -40,14 +46,8 @@ a {
 }
 
 aside {
-  float: left;
   width: 24%;
   padding: 3%;
-  position: fixed;
-}
-
-aside ul {
-  padding: 0;
 }
 
 aside,
@@ -70,6 +70,7 @@ article {
   margin: 15%;
   margin-left: 0;
   margin-top: 12%;
+  max-width: 40rem;
 }
 
 .highlighted {
@@ -79,6 +80,11 @@ article {
 a,
 a:visited {
   color: #00f;
+}
+
+.pages {
+  margin-left: 10px;
+  padding: 0;
 }
 
 .pages a {
@@ -91,7 +97,9 @@ a:visited {
 }
 
 h1 {
+  border-bottom: 1px solid #cccccc;
   font-size: 140%;
+  padding-bottom: 0.5rem;
 }
 
 h2 {
@@ -99,6 +107,16 @@ h2 {
 }
 
 blockquote {
+  background: #fcf7e8;
+  border: 1px solid #cccccc;
   font-style: italic;
+  margin: 1rem -1rem;
+  padding: 1rem;
+}
+
+.search {
+  height: 2rem;
+  -webkit-appearance: none;
+  border: 1px solid #cccccc;
 }
 /*# sourceMappingURL=main.css.map */
