@@ -1,7 +1,6 @@
 $bordercolor: hsl(0, 0%, 80%);
 
 body {
-    display: flex;
     flex-direction: row;
     padding: 0;
     margin: 0;
@@ -35,6 +34,7 @@ button {
 }
 
 main {
+    float: right;
     width: 70%;
 }
 
@@ -44,8 +44,11 @@ a {
 }
 
 aside {
-    width: 24%;
+    float: left;
+    height: 100vh;
     padding: 3%;
+    position: fixed;
+    width: 24%;
 }
 
 aside,

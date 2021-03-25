@@ -1,7 +1,4 @@
 body {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
@@ -38,6 +35,7 @@ button.delete {
 }
 
 main {
+  float: right;
   width: 70%;
 }
 
@@ -46,8 +44,11 @@ a {
 }
 
 aside {
-  width: 24%;
+  float: left;
+  height: 100vh;
   padding: 3%;
+  position: fixed;
+  width: 24%;
 }
 
 aside,
