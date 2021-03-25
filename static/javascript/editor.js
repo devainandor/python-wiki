@@ -1,23 +1,9 @@
-// https://stackoverflow.com/a/62266439
-
 export class Editor {
     constructor() {
         this.contentEl = document.querySelector('.content');
-        this.setEditable();
-        this.initEventHandlers();
-    }
-
-    setEditable() {
         this.contentEl.contentEditable = true;
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
-        const title = document.querySelector('h1');
-        title.contentEditable = true;
-        title.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                this.contentEl.focus();
-                event.preventDefault();
-            }
-        });
+        this.initEventHandlers();
     }
 
     documentClickHandler(event) {
@@ -31,30 +17,19 @@ export class Editor {
         }
     }
 
-    // TODO: rename
     saveArticle(callback = null) {
         const method = this.getMethod();
-        const article = document.querySelector('article');
+        const content = document.querySelector('.content');
         const request = new XMLHttpRequest();
         request.open(method, document.URL, true);
         this.contentEl.setAttribute('data-empty', 'false');
         const formData = new FormData();
-        formData.append('content', article.innerHTML);
+        formData.append('content', content.innerHTML);
         if (callback) {
             request.onload = callback;
         }
         request.send(formData);
         this.refreshSidebar();
-    }
-
-    setStrikethrough(el) {
-        if (el.checked) {
-            el.parentElement.style.textDecoration = 'line-through';
-            el.setAttribute('checked', 'checked');
-        } else {
-            el.parentElement.style.textDecoration = '';
-            el.removeAttribute('checked');
-        }
     }
 
     initEventHandlers() {
@@ -69,13 +44,7 @@ export class Editor {
             },
             {
                 name: 'list',
-                // TODO:
                 action: () => { document.execCommand('insertUnorderedList'); },
-            },
-            {
-                name: 'del',
-                // TODO:
-                action: () => { document.execCommand('strikeThrough'); },
             },
             {
                 name: 'h2',
@@ -103,14 +72,15 @@ export class Editor {
             const linkList = document.querySelector('.pages');
             linkList.innerHTML = '';
             const response = JSON.parse(this.responseText);
-            // TODO: append at once?
+            const fragment = document.createDocumentFragment();
             response.pages.forEach((page) => {
                 const a = document.createElement('a');
                 const text = document.createTextNode(page);
                 a.appendChild(text);
                 a.setAttribute('href', `/${page}`);
-                linkList.appendChild(a);
+                fragment.appendChild(a);
             });
+            linkList.appendChild(fragment);
         };
         request.send();
     }
@@ -126,7 +96,6 @@ export class Editor {
 
     insertLink() {
         const selectedText = document.getSelection().toString();
-        // TODO:
         document.execCommand('createLink', true, selectedText);
     }
 
@@ -141,13 +110,10 @@ export class Editor {
     }
 
     toggleBlock(tagName) {
-        // FIXME: get block level parent
         const node = this.getBlockParent(document.getSelection().anchorNode);
         if (node.tagName == tagName) {
-            // TODO:
             document.execCommand('formatBlock', true, 'P');
         } else {
-            // TODO:
             document.execCommand('formatBlock', true, tagName);
         }
     }

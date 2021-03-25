@@ -16,8 +16,6 @@
     <nav class="toolbar">
       <button class="link" title="Insert link">Link</button>
       <button class="list" title="Insert bulleted list">List</button>
-      <button class="del" title="Strikethrough text">Strike</button>
-      <!-- <button class="checkbox" title="Insert checkbox"></button> -->
       <button class="h2" title="Subheading">H2</button>
       <button class="blockquote" title="Blockquote">Quote</button>
       <button class="save" title="save">Save</button>
@@ -25,9 +23,12 @@
     </nav>
     <article>
       {% if content %}
-      {% autoescape false %}
-      {{content}}
-      {% endautoescape %}
+      <h1>{{title}}</h1>
+      <section class="content" data-empty="false">
+        {% autoescape false %}
+        {{content}}
+        {% endautoescape %}
+      </section>
       {% else %}
       <h1>{{title}}</h1>
       <section class="content" data-empty="true">

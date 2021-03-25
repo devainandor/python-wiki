@@ -28,7 +28,7 @@ export class ImageLoader {
         event.preventDefault();
         const files = event.dataTransfer.files;
         for (let i = 0; i < files.length; i++) {
-            file = files.item(i);
+            const file = files.item(i);
             if (file.type.match('image.*')) {
                 const reader = new FileReader();
                 reader.onload = this.insertFile.bind(this);

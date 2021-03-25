@@ -69,7 +69,7 @@ def index():
         page = get_pages()[0]
     except IndexError:
         create_default_page()
-        page = 'index'
+        page = 'Index'
     return redirect(url_for('show_page', page=page))
 
 
@@ -122,8 +122,11 @@ def delete_page(page):
 @ app.route('/search/<query>', methods=['GET'])
 def search(query):
     cursor = get_db().cursor()
+    qs = '%{}%'.format(query)
     pages = [row[0] for row in cursor.execute(
-        'SELECT page FROM idx WHERE content LIKE ?', ('%{}%'.format(query),))]
+        """SELECT page FROM idx
+        WHERE page LIKE ?
+        OR content LIKE ?""", (qs, qs,))]
     return jsonify(pages=pages)
 
 
@@ -134,19 +137,16 @@ def list_files():
 
 
 def create_default_page():
-    if not get_pages():
-        with codecs.open(os.path.join(app.config['DATADIR'], 'Index.html'), 'w', 'utf-8') as index:
-            index.write("""\
-<h1>Index</h1>
-<section class="content">
-<p>This is a placeholder page for your wiki. Click anywhere in the text or the title to edit.</p>
+    with codecs.open(os.path.join(app.config['DATADIR'], 'Index.html'), 'w', 'utf-8') as index:
+        index.write("""\
+<p>This is a placeholder page for your wiki. Click anywhere in the text to edit.</p>
 <p>This wiki <strong>does not use versioning (yet).</strong> Please use Dropbox, Time Machine or any other versioning/backup solution for valuable data.</p>
 <p>You can find the latest version at <a href="https://github.com/nandordevai/python-wiki">https://github.com/nandordevai/python-wiki</a>.</p>
-</section>
 """)
 
 
 if __name__ == '__main__':
-    create_default_page()
+    if not get_pages():
+        create_default_page()
     build_index()
     app.run(host='localhost')

@@ -1,7 +1,3 @@
-remove unnecessary items from toolbar
-
-update design
-
 add template chooser for new pages
 
 add map page
@@ -9,3 +5,34 @@ add map page
 update search results on type
 
 optimize index updates
+
+store images in files
+
+add full screen image viewer
+
+handle other file types
+- video
+- PDF
+- audio
+
+add sound effect player
+
+make title editable, update filename on save
+
+make sidebar more organized
+- categories?
+- add an option to hide page from sidebar
+- favorites?
+
+make deleted files recoverable
+
+add version history
+
+update XMLHttpRequest to fetch API
+
+upgrade from execCommand()
+https://stackoverflow.com/a/62266439
+
+make sidebar fixed
+
+do not reload the whole page?
