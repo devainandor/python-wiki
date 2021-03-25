@@ -40,7 +40,7 @@ export class Editor {
             },
             {
                 name: 'link',
-                action: this.insertLink.bind(this),
+                action: this.toggleLink.bind(this),
             },
             {
                 name: 'list',
@@ -94,9 +94,14 @@ export class Editor {
         };
     }
 
-    insertLink() {
-        const selectedText = document.getSelection().toString();
-        document.execCommand('createLink', true, selectedText);
+    toggleLink() {
+        const node = document.getSelection().anchorNode;
+        if (node.parentNode.nodeName === 'A') {
+            document.execCommand('unlink', false, false);
+        } else {
+            const selectedText = document.getSelection().toString();
+            document.execCommand('createLink', true, selectedText);
+        }
     }
 
     getBlockParent(el) {

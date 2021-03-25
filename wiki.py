@@ -65,12 +65,7 @@ def get_pages():
 
 @ app.route('/', methods=['GET'])
 def index():
-    try:
-        page = get_pages()[0]
-    except IndexError:
-        create_default_page()
-        page = 'Index'
-    return redirect(url_for('show_page', page=page))
+    return redirect(url_for('show_page', page='Index'))
 
 
 @ app.route('/<page>', methods=['GET'])

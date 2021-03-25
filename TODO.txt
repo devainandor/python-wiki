@@ -15,7 +15,10 @@ handle other file types
 
 add sound effect player
 
-make title editable, update filename on save
+rename page?
+- make title editable
+- update filename
+- update all links to it
 
 make sidebar more organized
 - categories?
