@@ -1,7 +1,12 @@
 export class Search {
     constructor() {
+        this.typing = false;
+        this.search = null;
         document.querySelector('.search')
-            .addEventListener('search', this.doSearch.bind(this));
+            .addEventListener('keyup', (event) => {
+                this.typing = true;
+                this.doSearch(event);
+            });
         this.filelistEl = document.querySelector('.pages');
     }
 
@@ -23,6 +28,14 @@ export class Search {
     }
 
     doSearch(event) {
+        if (this.typing) {
+            this.typing = false;
+            clearTimeout(this.search);
+            this.search = setTimeout(() => {
+                this.doSearch(event);
+            }, 400);
+            return;
+        }
         if (event.target.value === '') {
             this.clearResults();
             return;

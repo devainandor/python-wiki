@@ -2,8 +2,6 @@ add template chooser for new pages
 
 add map page
 
-update search results on type
-
 optimize index updates
 
 store images in files
