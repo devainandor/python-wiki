@@ -2,8 +2,6 @@ add template chooser for new pages
 
 add map page
 
-optimize index updates
-
 store images in files
 
 add full screen image viewer

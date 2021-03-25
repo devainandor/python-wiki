@@ -28,33 +28,44 @@ def get_db():
     return db
 
 
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+
 def get_filename(page):
     return os.path.join(app.config['DATADIR'], page + '.html')
 
 
 def build_index():
-    db = sqlite3.connect(IDX)
-    cursor = db.cursor()
-    cursor.execute(
-        'CREATE TABLE IF NOT EXISTS idx (page text CONSTRAINT utext UNIQUE ON CONFLICT REPLACE, content text)')
+    with app.app_context():
+        cursor = get_db().execute(
+            'CREATE TABLE IF NOT EXISTS idx (page text CONSTRAINT utext UNIQUE ON CONFLICT REPLACE, content text)')
 
-    def add_index(page):
+        def add_index(page):
+            with codecs.open(get_filename(page), 'r', 'utf-8') as file:
+                content = striphtml(file.read())
+                cursor.execute(
+                    'INSERT OR REPLACE INTO idx VALUES (?, ?)', (page, content))
+
+        [add_index(page) for page in get_pages()]
+
+
+def update_index(page):
+    with app.app_context():
+        cursor = get_db().cursor()
         with codecs.open(get_filename(page), 'r', 'utf-8') as file:
             content = striphtml(file.read())
+            print(content, page)
             cursor.execute(
-                'INSERT OR REPLACE INTO idx VALUES (?, ?)', (page, content))
-
-    [add_index(page) for page in get_pages()]
-    db.commit()
-    db.close()
+                'UPDATE idx SET content = ? WHERE page = ?', (content, page))
 
 
 def remove_index(page):
-    db = sqlite3.connect(IDX)
-    cursor = db.cursor()
-    cursor.execute('DELETE FROM idx where page = ?', (page,))
-    db.commit()
-    db.close()
+    with app.app_context():
+        cursor = get_db().execute('DELETE FROM idx where page = ?', (page,))
 
 
 def get_pages():
@@ -100,8 +111,8 @@ def update_page(page):
         abort(404)
     with codecs.open(file, 'w', 'utf-8') as newpage:
         newpage.write(request.form.get('content', '').strip())
-        build_index()
-        return Response(status=204)
+    update_index(page)
+    return Response(status=204)
 
 
 @ app.route('/<page>', methods=['DELETE'])
