@@ -1,9 +1,43 @@
 export class Editor {
     constructor() {
+        this.buttons = [
+            {
+                name: 'delete',
+                action: this.deleteArticle.bind(this),
+            },
+            {
+                name: 'link',
+                action: this.toggleLink.bind(this),
+            },
+            {
+                name: 'list',
+                action: () => { document.execCommand('insertUnorderedList'); },
+            },
+            {
+                name: 'h2',
+                action: () => { this.toggleBlock('H2'); },
+            },
+            {
+                name: 'blockquote',
+                action: () => { this.toggleBlock('BLOCKQUOTE'); },
+            },
+            {
+                name: 'save',
+                action: this.saveArticle.bind(this),
+            },
+        ];
         this.contentEl = document.querySelector('.content');
         this.contentEl.contentEditable = true;
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
+        this.contentEl.addEventListener('keydown', this.keyHandler.bind(this));
         this.initEventHandlers();
+    }
+
+    keyHandler(event) {
+        if (event.code === 'KeyS' && event.metaKey) {
+            this.saveArticle();
+            event.preventDefault();
+        }
     }
 
     documentClickHandler(event) {
@@ -33,33 +67,7 @@ export class Editor {
     }
 
     initEventHandlers() {
-        const buttons = [
-            {
-                name: 'delete',
-                action: this.deleteArticle.bind(this),
-            },
-            {
-                name: 'link',
-                action: this.toggleLink.bind(this),
-            },
-            {
-                name: 'list',
-                action: () => { document.execCommand('insertUnorderedList'); },
-            },
-            {
-                name: 'h2',
-                action: () => { this.toggleBlock('H2'); },
-            },
-            {
-                name: 'blockquote',
-                action: () => { this.toggleBlock('BLOCKQUOTE'); },
-            },
-            {
-                name: 'save',
-                action: this.saveArticle.bind(this),
-            },
-        ];
-        buttons.forEach((button) => {
+        this.buttons.forEach((button) => {
             document.querySelector(`.${button.name}`)
                 .addEventListener('click', button.action);
         });
@@ -104,23 +112,27 @@ export class Editor {
         }
     }
 
-    getBlockParent(el) {
-        let parent = null;
-        let currentChild = el;
-        do {
-            parent = currentChild.parentElement;
-            currentChild = parent;
-        } while (window.getComputedStyle(parent).display !== 'block');
-        return parent;
+    getCurrentBlock(el) {
+        let block = el;
+        while (window.getComputedStyle(block).display !== 'block') {
+            block = block.parentElement;
+        }
+        return block;
     }
 
     toggleBlock(tagName) {
-        const node = this.getBlockParent(document.getSelection().anchorNode);
-        if (node.tagName == tagName) {
-            document.execCommand('formatBlock', true, 'P');
-        } else {
-            document.execCommand('formatBlock', true, tagName);
-        }
+        // FIXME:
+        const anchorNode = document.getSelection().anchorNode;
+        console.log(anchorNode);
+        const block = anchorNode.nodeType === 1
+            ? anchorNode
+            : anchorNode.parentNode;
+        const newTagName = block.tagName === tagName
+            ? 'p'
+            : tagName;
+        const el = document.createElement(newTagName);
+        el.innerHTML = block.innerHTML;
+        block.replaceWith(el);
     }
 
     getMethod() {
