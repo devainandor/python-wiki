@@ -1,5 +1,13 @@
 export class Editor {
     constructor() {
+        /*
+        <button class="link" title="Insert link">Link</button>
+        <button class="list" title="Insert bulleted list">List</button>
+        <button class="h2" title="Subheading">H2</button>
+        <button class="quote" title="Blockquote">Quote</button>
+        <button class="save" title="save">Save</button>
+        <button class="delete" title="Delete">Delete</button>
+        */
         this.buttons = [
             {
                 name: 'delete',
@@ -18,7 +26,7 @@ export class Editor {
                 action: () => { this.toggleBlock('H2'); },
             },
             {
-                name: 'blockquote',
+                name: 'quote',
                 action: () => { this.toggleBlock('BLOCKQUOTE'); },
             },
             {
@@ -26,6 +34,14 @@ export class Editor {
                 action: this.saveArticle.bind(this),
             },
         ];
+        const fragment = document.createDocumentFragment();
+        this.buttons.forEach((_) => {
+            const el = document.createElement('button');
+            el.classList.add(_.name);
+            el.appendChild(document.createTextNode(_.name[0].toUpperCase() + _.name.slice(1)));
+            fragment.appendChild(el);
+        });
+        document.querySelector('.toolbar').appendChild(fragment);
         this.contentEl = document.querySelector('.content');
         this.contentEl.contentEditable = true;
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
@@ -45,9 +61,6 @@ export class Editor {
             this.saveArticle(() => {
                 window.location = event.target.getAttribute('href').toString();
             });
-        } else if (event.target.tagName == 'INPUT'
-            && event.target.parentElement.tagName === 'LI') {
-            this.setStrikethrough(event.target);
         }
     }
 
