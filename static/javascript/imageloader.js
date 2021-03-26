@@ -16,12 +16,18 @@ export class ImageLoader {
     }
 
     insertImage(fileName) {
+        const path = `/static/images/${fileName}`;
+        const a = document.createElement('a');
+        a.href = path;
         const img = document.createElement('img');
-        img.src = `/static/images/${fileName}`;
+        img.src = path;
+        a.appendChild(img);
         const selection = window.getSelection();
-        selection.getRangeAt(0).insertNode(img);
+        selection.getRangeAt(0).insertNode(a);
         img.setAttribute('width', 'auto');
         img.setAttribute('height', 'auto');
+        const event = new Event('imageinsert');
+        window.dispatchEvent(event);
     }
 
     handleDrop(event) {

@@ -1,5 +1,6 @@
 $border-color: hsl(0, 0%, 80%);
 $content-width: 40rem;
+$top: 100;
 
 body {
     flex-direction: row;
@@ -90,11 +91,6 @@ a:visited {
     }
 }
 
-.checkbox {
-    padding-left: 20px;
-    list-style-type: none;
-}
-
 h1 {
     border-bottom: 1px solid $border-color;
     font-size: 140%;
@@ -123,6 +119,31 @@ blockquote {
     display: none;
 }
 
-img {
-    max-width: $content-width;
+.content {
+    img {
+        cursor: pointer;
+        max-width: $content-width;
+    }
+}
+
+.image-viewer {
+    align-items: center;
+    background-color: hsla(0, 0%, 0%, 0.9);
+    display: none;
+    height: 100vh;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: $top;
+
+    img {
+        max-height: 100vh;
+        max-width: 100vw;
+    }
+
+    &--visible {
+        display: flex;
+    }
 }

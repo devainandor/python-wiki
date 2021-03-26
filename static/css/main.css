@@ -92,11 +92,6 @@ a:visited {
   display: block;
 }
 
-.checkbox {
-  padding-left: 20px;
-  list-style-type: none;
-}
-
 h1 {
   border-bottom: 1px solid #cccccc;
   font-size: 140%;
@@ -125,7 +120,36 @@ blockquote {
   display: none;
 }
 
-img {
+.content img {
+  cursor: pointer;
   max-width: 40rem;
+}
+
+.image-viewer {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+  height: 100vh;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 100;
+}
+
+.image-viewer img {
+  max-height: 100vh;
+  max-width: 100vw;
+}
+
+.image-viewer--visible {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 /*# sourceMappingURL=main.css.map */
