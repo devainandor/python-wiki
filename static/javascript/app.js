@@ -10,6 +10,16 @@ class Wiki {
         this.imageLoader = new ImageLoader();
         this.imageViewer = new ImageViewer();
         window.addEventListener('imageinsert', () => { this.imageViewer.initImageHandlers(); });
+        window.addEventListener('documentsave', this.showNotification);
+    }
+
+    showNotification(event) {
+        const el = document.querySelector('.notification');
+        el.classList.add('notification--active');
+        el.innerHTML = event.detail;
+        setTimeout(() => {
+            el.classList.remove('notification--active');
+        }, 1000);
     }
 }
 

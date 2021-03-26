@@ -1,13 +1,5 @@
 export class Editor {
     constructor() {
-        /*
-        <button class="link" title="Insert link">Link</button>
-        <button class="list" title="Insert bulleted list">List</button>
-        <button class="h2" title="Subheading">H2</button>
-        <button class="quote" title="Blockquote">Quote</button>
-        <button class="save" title="save">Save</button>
-        <button class="delete" title="Delete">Delete</button>
-        */
         this.buttons = [
             {
                 name: 'delete',
@@ -51,9 +43,14 @@ export class Editor {
 
     keyHandler(event) {
         if (event.code === 'KeyS' && event.metaKey) {
-            this.saveArticle();
+            this.saveArticle(() => { this.showNotification('Document saved'); });
             event.preventDefault();
         }
+    }
+
+    showNotification(message) {
+        const event = new CustomEvent('documentsave', { detail: message });
+        window.dispatchEvent(event);
     }
 
     documentClickHandler(event) {
@@ -125,18 +122,8 @@ export class Editor {
         }
     }
 
-    getCurrentBlock(el) {
-        let block = el;
-        while (window.getComputedStyle(block).display !== 'block') {
-            block = block.parentElement;
-        }
-        return block;
-    }
-
     toggleBlock(tagName) {
-        // FIXME:
-        const anchorNode = document.getSelection().anchorNode;
-        console.log(anchorNode);
+        const anchorNode = selection.anchorNode;
         const block = anchorNode.nodeType === 1
             ? anchorNode
             : anchorNode.parentNode;

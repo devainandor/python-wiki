@@ -1,5 +1,6 @@
 $border-color: hsl(0, 0%, 80%);
 $content-width: 40rem;
+$notification: 90;
 $top: 100;
 
 body {
@@ -145,5 +146,21 @@ blockquote {
 
     &--visible {
         display: flex;
+    }
+}
+
+.notification {
+    background-color: hsla(0, 0%, 100%, 0.9);
+    border: 1px solid $border-color;
+    bottom: 0;
+    display: none;
+    padding: 1rem 2rem;
+    position: fixed;
+    text-align: center;
+    width: 100vw;
+    z-index: $notification;
+
+    &--active {
+        display: block;
     }
 }
