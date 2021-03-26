@@ -1,4 +1,5 @@
 .venv/
-data/
+pages/
 idx.db
 .vscode/
+static/images/

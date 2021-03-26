@@ -1,4 +1,5 @@
-$bordercolor: hsl(0, 0%, 80%);
+$border-color: hsl(0, 0%, 80%);
+$content-width: 40rem;
 
 body {
     flex-direction: row;
@@ -68,7 +69,7 @@ article {
     margin: 15%;
     margin-left: 0;
     margin-top: 12%;
-    max-width: 40rem;
+    max-width: $content-width;
 }
 
 .highlighted {
@@ -95,7 +96,7 @@ a:visited {
 }
 
 h1 {
-    border-bottom: 1px solid $bordercolor;
+    border-bottom: 1px solid $border-color;
     font-size: 140%;
     padding-bottom: 0.5rem;
 }
@@ -106,7 +107,7 @@ h2 {
 
 blockquote {
     background: hsla(45, 80%, 95%, 1);
-    border: 1px solid $bordercolor;
+    border: 1px solid $border-color;
     font-style: italic;
     margin: 1rem -1rem;
     padding: 1rem;
@@ -115,5 +116,13 @@ blockquote {
 .search {
     height: 2rem;
     -webkit-appearance: none;
-    border: 1px solid $bordercolor;
+    border: 1px solid $border-color;
+}
+
+.upload {
+    display: none;
+}
+
+img {
+    max-width: $content-width;
 }

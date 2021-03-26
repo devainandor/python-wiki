@@ -120,4 +120,12 @@ blockquote {
   -webkit-appearance: none;
   border: 1px solid #cccccc;
 }
+
+.upload {
+  display: none;
+}
+
+img {
+  max-width: 40rem;
+}
 /*# sourceMappingURL=main.css.map */

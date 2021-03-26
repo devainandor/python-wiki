@@ -15,12 +15,13 @@ export class ImageLoader {
         window.addEventListener('drop', this.handleDrop.bind(this));
     }
 
-    insertFile(file) {
-        const dataURI = file.target.result;
+    insertImage(fileName) {
         const img = document.createElement('img');
-        img.src = dataURI;
+        img.src = `/static/images/${fileName}`;
         const selection = window.getSelection();
         selection.getRangeAt(0).insertNode(img);
+        img.setAttribute('width', 'auto');
+        img.setAttribute('height', 'auto');
     }
 
     handleDrop(event) {
@@ -29,11 +30,13 @@ export class ImageLoader {
         const files = event.dataTransfer.files;
         for (let i = 0; i < files.length; i++) {
             const file = files.item(i);
-            if (file.type.match('image.*')) {
-                const reader = new FileReader();
-                reader.onload = this.insertFile.bind(this);
-                reader.readAsDataURL(file);
-            }
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(this.insertImage.bind(this, file.name));
         }
     }
 }

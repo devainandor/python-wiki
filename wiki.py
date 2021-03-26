@@ -8,11 +8,13 @@ from flask import Flask, render_template, abort, request, Response, g, jsonify, 
 app = Flask(__name__)
 if os.getenv('FLASK_ENV', 'production') == 'production':
     debug = False
-    datadir = os.path.join(os.path.expanduser('~'), 'Dropbox/Wiki')
 else:
     debug = True
-    datadir = 'data'
-app.config.update(DATADIR=datadir, DEBUG=debug)
+app.config.update(
+    DATADIR='pages',
+    IMGDIR='static/images',
+    DEBUG=debug
+)
 IDX = 'idx.db'
 
 
@@ -58,7 +60,6 @@ def update_index(page):
         cursor = get_db().cursor()
         with codecs.open(get_filename(page), 'r', 'utf-8') as file:
             content = striphtml(file.read())
-            print(content, page)
             cursor.execute(
                 'UPDATE idx SET content = ? WHERE page = ?', (content, page))
 
@@ -144,6 +145,13 @@ def search(query):
 def list_files():
     pages = get_pages()
     return jsonify(pages=pages)
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']
+    file.save(os.path.join(app.config['IMGDIR'], file.filename))
+    return Response(status=204)
 
 
 def create_default_page():
