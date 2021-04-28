@@ -23,7 +23,9 @@ export class Editor {
             },
             {
                 name: 'save',
-                action: this.saveArticle.bind(this),
+                action: () => {
+                    this.saveArticle(() => { this.showNotification('Document saved'); });
+                },
             },
         ];
         const fragment = document.createDocumentFragment();
@@ -37,14 +39,14 @@ export class Editor {
         this.contentEl = document.querySelector('.content');
         this.contentEl.contentEditable = true;
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
-        this.contentEl.addEventListener('keydown', this.keyHandler.bind(this));
+        this.contentEl.addEventListener('keydown', this.keyHandler.bind(this), false);
         this.initEventHandlers();
     }
 
     keyHandler(event) {
         if (event.code === 'KeyS' && event.metaKey) {
-            this.saveArticle(() => { this.showNotification('Document saved'); });
             event.preventDefault();
+            this.saveArticle(() => { this.showNotification('Document saved'); });
         }
     }
 
@@ -113,16 +115,22 @@ export class Editor {
     }
 
     toggleLink() {
-        const node = document.getSelection().anchorNode;
+        const selection = document.getSelection();
+        const node = selection.anchorNode;
         if (node.parentNode.nodeName === 'A') {
             document.execCommand('unlink', false, false);
         } else {
             const selectedText = document.getSelection().toString();
-            document.execCommand('createLink', true, selectedText);
+            if (selectedText === '') return;
+            const el = document.createElement('a');
+            el.setAttribute('href', `/${selectedText}`);
+            selection.getRangeAt(0).surroundContents(el);
         }
     }
 
     toggleBlock(tagName) {
+        const selection = document.getSelection();
+        const pos = selection.getRangeAt(0).startOffset;
         const anchorNode = selection.anchorNode;
         const block = anchorNode.nodeType === 1
             ? anchorNode
@@ -133,6 +141,11 @@ export class Editor {
         const el = document.createElement(newTagName);
         el.innerHTML = block.innerHTML;
         block.replaceWith(el);
+        const range = document.createRange();
+        range.setStart(el.childNodes[0], pos);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
     }
 
     getMethod() {
