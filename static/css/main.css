@@ -72,6 +72,12 @@ aside,
 .toolbar__button {
   text-transform: capitalize;
   transition: opacity 0.25s;
+  transition: background 0.25s;
+  transition: color 0.25s;
+}
+.toolbar__button--active {
+  background: #00e;
+  color: #fff;
 }
 .toolbar--hidden .toolbar__button {
   opacity: 0;
@@ -84,7 +90,7 @@ article {
   margin: 15%;
   margin-left: 0;
   margin-top: 12%;
-  max-width: 40rem;
+  width: 40rem;
 }
 
 .highlighted {

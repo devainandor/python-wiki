@@ -83,6 +83,13 @@ aside,
     &__button {
         text-transform: capitalize;
         transition: opacity 0.25s;
+        transition: background 0.25s;
+        transition: color 0.25s;
+
+        &--active {
+            background: #00e;
+            color: #fff;
+        }
     }
 
     &--hidden {
@@ -100,7 +107,7 @@ article {
     margin: 15%;
     margin-left: 0;
     margin-top: 12%;
-    max-width: $content-width;
+    width: $content-width;
 }
 
 .highlighted {

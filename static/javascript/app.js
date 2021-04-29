@@ -26,3 +26,7 @@ class Wiki {
 window.onload = () => {
     const wiki = new Wiki();
 };
+
+if (localStorage.getItem('pywiki.editable') === null) {
+    localStorage.setItem('pywiki.editable', 'true');
+}

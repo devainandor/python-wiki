@@ -1,7 +1,6 @@
 export class Editor {
     constructor() {
         this.isDirty = false;
-        this.editable = true;
         this.buttonGroups = [
             // styles
             [
@@ -67,13 +66,22 @@ export class Editor {
         const toolbar = document.querySelector('.toolbar');
         toolbar.appendChild(fragment);
         const readonlyButton = document.createElement('button');
-        readonlyButton.classList.add('toolbar_button');
-        readonlyButton.classList.add('toolbar_button--static');
+        readonlyButton.classList.add('toolbar__button');
+        readonlyButton.classList.add('toolbar__button--static');
+        readonlyButton.classList.add('toolbar__button--readonly');
         readonlyButton.appendChild(document.createTextNode('Read only'));
         toolbar.appendChild(readonlyButton);
+        const isEditable = localStorage.getItem('pywiki.editable') == 'true';
+        if (!isEditable) {
+            toolbar.classList.add('toolbar--hidden');
+            readonlyButton.classList.add('toolbar__button--active');
+        } else {
+            toolbar.classList.remove('toolbar--hidden');
+            readonlyButton.classList.remove('toolbar__button--active');
+        }
         readonlyButton.addEventListener('click', this.toggleEditable.bind(this));
         this.contentEl = document.querySelector('.content');
-        this.contentEl.contentEditable = this.editable;
+        this.contentEl.contentEditable = localStorage.getItem('pywiki.editable') === 'true';
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
         this.contentEl.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) return;
@@ -89,9 +97,12 @@ export class Editor {
     }
 
     toggleEditable() {
-        this.editable = !this.editable;
-        this.contentEl.contentEditable = this.editable;
+        let currentState = localStorage.getItem('pywiki.editable') == 'true';
+        currentState = !currentState;
+        localStorage.setItem('pywiki.editable', currentState.toString());
+        this.contentEl.contentEditable = currentState;
         document.querySelector('.toolbar').classList.toggle('toolbar--hidden');
+        document.querySelector('.toolbar__button--readonly').classList.toggle('toolbar__button--active');
     }
 
     setStyle(style) {
