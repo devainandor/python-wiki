@@ -95,11 +95,8 @@ article {
   margin: 15%;
   margin-left: 0;
   margin-top: 12%;
+  padding-right: 1rem;
   width: 40rem;
-}
-
-.highlighted {
-  background: #ff0;
 }
 
 a,
