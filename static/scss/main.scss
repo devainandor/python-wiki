@@ -90,16 +90,20 @@ aside,
             background: #00e;
             color: #fff;
         }
+
+        &--readonly {
+            text-transform: none;
+        }
     }
 
-    &--hidden {
-        .toolbar__button {
-            opacity: 0;
+    &--hidden &__button {
+        pointer-events: none;
+        opacity: 0;
+    }
 
-            &--static {
-                opacity: 1;
-            }
-        }
+    &--hidden &__button--static {
+        pointer-events: initial;
+        opacity: 1;
     }
 }
 

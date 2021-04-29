@@ -79,10 +79,15 @@ aside,
   background: #00e;
   color: #fff;
 }
+.toolbar__button--readonly {
+  text-transform: none;
+}
 .toolbar--hidden .toolbar__button {
+  pointer-events: none;
   opacity: 0;
 }
 .toolbar--hidden .toolbar__button--static {
+  pointer-events: initial;
   opacity: 1;
 }
 
