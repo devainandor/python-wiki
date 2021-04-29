@@ -117,14 +117,16 @@ export class Editor {
     toggleLink() {
         const selection = document.getSelection();
         const node = selection.anchorNode;
+        const selectedText = document.getSelection().toString();
+        const range = selection.getRangeAt(0);
         if (node.parentNode.nodeName === 'A') {
-            document.execCommand('unlink', false, false);
+            node.parentElement.parentElement.removeChild(node.parentElement);
+            range.insertNode(document.createTextNode(selectedText));
         } else {
-            const selectedText = document.getSelection().toString();
             if (selectedText === '') return;
             const el = document.createElement('a');
             el.setAttribute('href', `/${selectedText}`);
-            selection.getRangeAt(0).surroundContents(el);
+            range.surroundContents(el);
         }
     }
 
