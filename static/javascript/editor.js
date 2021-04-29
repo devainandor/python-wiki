@@ -1,39 +1,63 @@
 export class Editor {
     constructor() {
-        this.buttons = [
-            {
-                name: 'delete',
-                action: this.deleteArticle.bind(this),
-            },
-            {
-                name: 'link',
-                action: this.toggleLink.bind(this),
-            },
-            {
-                name: 'list',
-                action: () => { document.execCommand('insertUnorderedList'); },
-            },
-            {
-                name: 'h2',
-                action: () => { this.toggleBlock('H2'); },
-            },
-            {
-                name: 'quote',
-                action: () => { this.toggleBlock('BLOCKQUOTE'); },
-            },
-            {
-                name: 'save',
-                action: () => {
-                    this.saveArticle(() => { this.showNotification('Document saved'); });
+        this.buttonGroups = [
+            // styles
+            [
+                {
+                    name: 'link',
+                    action: this.toggleLink.bind(this),
                 },
-            },
+                {
+                    name: 'list',
+                    action: () => { this.setStyle('unorderedList'); },
+                },
+                {
+                    name: 'h2',
+                    action: () => { this.setBlockStyle('H2'); },
+                },
+                {
+                    name: 'h3',
+                    action: () => { this.setBlockStyle('H3'); },
+                },
+                {
+                    name: 'quote',
+                    action: () => { this.setBlockStyle('BLOCKQUOTE'); },
+                },
+                {
+                    name: 'p',
+                    action: () => { this.setBlockStyle('P'); },
+                },
+                {
+                    name: 'em',
+                    action: () => { this.setInlineStyle('EM'); },
+                },
+            ],
+            // commands
+            [
+                {
+                    name: 'delete',
+                    action: this.deleteArticle.bind(this),
+                },
+                {
+                    name: 'save',
+                    action: () => {
+                        this.saveArticle(() => { this.showNotification('Document saved'); });
+                    },
+                },
+            ]
         ];
         const fragment = document.createDocumentFragment();
-        this.buttons.forEach((_) => {
-            const el = document.createElement('button');
-            el.classList.add(_.name);
-            el.appendChild(document.createTextNode(_.name[0].toUpperCase() + _.name.slice(1)));
-            fragment.appendChild(el);
+        this.buttonGroups.forEach((group) => {
+            const div = document.createElement('div');
+            div.classList.add('toolbar__group');
+            fragment.appendChild(div);
+            group.forEach((_) => {
+                const el = document.createElement('button');
+                el.classList.add('toolbar__button');
+                el.classList.add(_.name);
+                el.appendChild(document.createTextNode(_.name[0].toUpperCase() + _.name.slice(1)));
+                div.appendChild(el);
+            });
         });
         document.querySelector('.toolbar').appendChild(fragment);
         this.contentEl = document.querySelector('.content');
@@ -41,6 +65,14 @@ export class Editor {
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
         this.contentEl.addEventListener('keydown', this.keyHandler.bind(this), false);
         this.initEventHandlers();
+    }
+
+    setStyle(style) {
+        switch (style) {
+            case 'unorderedList':
+                document.execCommand('insertUnorderedList');
+                break;
+        }
     }
 
     keyHandler(event) {
@@ -79,9 +111,11 @@ export class Editor {
     }
 
     initEventHandlers() {
-        this.buttons.forEach((button) => {
-            document.querySelector(`.${button.name}`)
-                .addEventListener('click', button.action);
+        this.buttonGroups.forEach((group) => {
+            group.forEach((button) => {
+                document.querySelector(`.${button.name}`)
+                    .addEventListener('click', button.action);
+            });
         });
     }
 
@@ -130,17 +164,23 @@ export class Editor {
         }
     }
 
-    toggleBlock(tagName) {
+    setInlineStyle(tagName) {
+        const selection = document.getSelection();
+        const selectedText = document.getSelection().toString();
+        if (selectedText === '') return;
+        const range = selection.getRangeAt(0);
+        const el = document.createElement(tagName);
+        range.surroundContents(el);
+    }
+
+    setBlockStyle(tagName) {
         const selection = document.getSelection();
         const pos = selection.getRangeAt(0).startOffset;
         const anchorNode = selection.anchorNode;
         const block = anchorNode.nodeType === 1
             ? anchorNode
             : anchorNode.parentNode;
-        const newTagName = block.tagName === tagName
-            ? 'p'
-            : tagName;
-        const el = document.createElement(newTagName);
+        const el = document.createElement(tagName);
         el.innerHTML = block.innerHTML;
         block.replaceWith(el);
         const range = document.createRange();

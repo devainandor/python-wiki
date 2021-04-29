@@ -78,6 +78,12 @@ aside,
           user-select: none;
 }
 
+.toolbar__group {
+  display: inline;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
 nav {
   position: fixed;
   padding-top: 3%;
@@ -112,12 +118,16 @@ a:visited {
 
 h1 {
   border-bottom: 1px solid #cccccc;
-  font-size: 140%;
+  font-size: 150%;
   padding-bottom: 0.5rem;
 }
 
 h2 {
-  font-size: 120%;
+  font-size: 135%;
+}
+
+h3 {
+  font-size: 115%;
 }
 
 blockquote {
