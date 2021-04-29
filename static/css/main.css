@@ -29,9 +29,14 @@ button.delete {
   color: #f00;
 }
 
+.ui-main {
+  display: flex;
+  flex-direction: row;
+}
+
 main {
-  float: right;
-  width: 70%;
+  height: 100vh;
+  overflow: scroll;
 }
 
 a {
@@ -39,11 +44,9 @@ a {
 }
 
 aside {
-  float: left;
-  height: 100vh;
-  padding: 3%;
-  position: fixed;
-  width: 24%;
+  height: calc(100vh - 6rem);
+  padding: 3rem;
+  width: 20rem;
 }
 
 aside,
@@ -54,6 +57,13 @@ aside,
           user-select: none;
 }
 
+.toolbar {
+  background: #fff;
+  height: 4rem;
+  line-height: 4rem;
+  position: fixed;
+  width: 100%;
+}
 .toolbar__group {
   display: inline;
   margin-right: 10px;
@@ -61,14 +71,13 @@ aside,
 }
 .toolbar__button {
   text-transform: capitalize;
+  transition: opacity 0.25s;
 }
-
-nav {
-  position: fixed;
-  padding-top: 3%;
-  padding-bottom: 1%;
-  background: #fff;
-  width: 100%;
+.toolbar--hidden .toolbar__button {
+  opacity: 0;
+}
+.toolbar--hidden .toolbar__button--static {
+  opacity: 1;
 }
 
 article {
@@ -168,4 +177,9 @@ blockquote {
 .notification--active {
   bottom: 0px;
   display: block;
+}
+
+em {
+  font-style: normal;
+  font-weight: bold;
 }/*# sourceMappingURL=main.css.map */

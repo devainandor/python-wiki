@@ -40,9 +40,15 @@ button {
     }
 }
 
+.ui-main {
+    display: flex;
+    flex-direction: row;
+}
+
 main {
-    float: right;
-    width: 70%;
+    height: 100vh;
+    overflow: scroll;
+    // width: 70%;
 }
 
 a {
@@ -51,11 +57,9 @@ a {
 }
 
 aside {
-    float: left;
-    height: 100vh;
-    padding: 3%;
-    position: fixed;
-    width: 24%;
+    height: calc(100vh - 6rem);
+    padding: 3rem;
+    width: 20rem;
 }
 
 aside,
@@ -64,6 +68,12 @@ aside,
 }
 
 .toolbar {
+    background: #fff;
+    height: 4rem;
+    line-height: 4rem;
+    position: fixed;
+    width: 100%;
+
     &__group {
         display: inline;
         margin-right: 10px;
@@ -72,15 +82,18 @@ aside,
 
     &__button {
         text-transform: capitalize;
+        transition: opacity 0.25s;
     }
-}
 
-nav {
-    position: fixed;
-    padding-top: 3%;
-    padding-bottom: 1%;
-    background: #fff;
-    width: 100%;
+    &--hidden {
+        .toolbar__button {
+            opacity: 0;
+
+            &--static {
+                opacity: 1;
+            }
+        }
+    }
 }
 
 article {
@@ -186,4 +199,9 @@ blockquote {
         bottom: 0px;
         display: block;
     }
+}
+
+em {
+    font-style: normal;
+    font-weight: bold;
 }

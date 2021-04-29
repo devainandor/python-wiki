@@ -4,39 +4,43 @@
 <link rel="stylesheet" href="/static/css/main.css">
 
 <body>
-  <div class="image-viewer">
-    <img src="">
+  <div class="ui-misc">
+    <div class="image-viewer">
+      <img src="">
+    </div>
+    <div class="notification"></div>
+    <form class="upload">
+      <input type="file" class="upload__input" multiple accept="image/*">
+    </form>
   </div>
-  <div class="notification"></div>
-  <form class="upload">
-    <input type="file" class="upload__input" multiple accept="image/*">
-  </form>
-  <aside>
-    <input class="search" type="search" placeholder="Search">
-    <ul class="pages">
-      {% for page in pages %}
-      <a href="/{{page}}">{{page}}</a>
-      {% endfor %}
-    </ul>
-  </aside>
-  <main>
-    <nav class="toolbar">
-    </nav>
-    <article>
-      {% if content %}
-      <h1>{{title}}</h1>
-      <section class="content" data-empty="false">
-        {% autoescape false %}
-        {{content}}
-        {% endautoescape %}
-      </section>
-      {% else %}
-      <h1>{{title}}</h1>
-      <section class="content" data-empty="true">
-        <p>…</p>
-      </section>
-      {% endif %}
-    </article>
-  </main>
+  <div class="ui-main">
+    <aside>
+      <input class="search" type="search" placeholder="Search">
+      <ul class="pages">
+        {% for page in pages %}
+        <a href="/{{page}}">{{page}}</a>
+        {% endfor %}
+      </ul>
+    </aside>
+    <main>
+      <nav class="toolbar">
+      </nav>
+      <article>
+        {% if content %}
+        <h1>{{title}}</h1>
+        <section class="content" data-empty="false">
+          {% autoescape false %}
+          {{content}}
+          {% endautoescape %}
+        </section>
+        {% else %}
+        <h1>{{title}}</h1>
+        <section class="content" data-empty="true">
+          <p>…</p>
+        </section>
+        {% endif %}
+      </article>
+    </main>
+  </div>
   <script src="/static/javascript/app.js" type="module"></script>
 </body>
