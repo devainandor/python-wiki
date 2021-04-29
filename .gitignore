@@ -3,3 +3,4 @@ pages/
 idx.db
 .vscode/
 static/images/
+.DS_Store

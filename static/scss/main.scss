@@ -3,12 +3,23 @@ $content-width: 40rem;
 $notification: 90;
 $top: 100;
 
+@font-face {
+    font-family: YoungSerif;
+    src: url("/static/fonts/YoungSerif-Regular.woff2") format("woff2");
+}
+
 body {
     flex-direction: row;
     padding: 0;
     margin: 0;
-    font-family: Georgia, Times, "Times New Roman", sans-serif;
+    font-family: Georgia, Times, "Times New Roman", serif;
     line-height: 150%;
+}
+
+@for $i from 1 to 6 {
+    h#{$i} {
+        font-family: YoungSerif;
+    }
 }
 
 *:focus {
