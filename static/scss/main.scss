@@ -2,24 +2,17 @@ $border-color: hsl(0, 0%, 80%);
 $content-width: 40rem;
 $notification: 90;
 $top: 100;
-
-@font-face {
-    font-family: YoungSerif;
-    src: url("/static/fonts/YoungSerif-Regular.woff2") format("woff2");
-}
+$system-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
+$system-serif: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times,
+    "Source Serif Pro", serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
 body {
     flex-direction: row;
     padding: 0;
     margin: 0;
-    font-family: Georgia, Times, "Times New Roman", serif;
+    font-family: $system-serif;
     line-height: 150%;
-}
-
-@for $i from 1 to 6 {
-    h#{$i} {
-        font-family: YoungSerif;
-    }
 }
 
 *:focus {
@@ -75,6 +68,10 @@ aside,
         display: inline;
         margin-right: 10px;
         padding-right: 10px;
+    }
+
+    &__button {
+        text-transform: capitalize;
     }
 }
 
@@ -176,8 +173,7 @@ blockquote {
     background-color: hsla(0, 0%, 100%, 0.9);
     border: 1px solid $border-color;
     bottom: -100px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-        "Helvetica Neue", sans-serif;
+    font-family: $system-sans;
     font-size: 12px;
     padding: 1rem 2rem;
     position: fixed;
