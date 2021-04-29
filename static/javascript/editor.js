@@ -1,5 +1,6 @@
 export class Editor {
     constructor() {
+        this.isDirty = false;
         this.buttonGroups = [
             // styles
             [
@@ -41,7 +42,10 @@ export class Editor {
                 {
                     name: 'save',
                     action: () => {
-                        this.saveArticle(() => { this.showNotification('Document saved'); });
+                        this.saveArticle(() => {
+                            this.isDirty = false;
+                            this.showNotification('Document saved');
+                        });
                     },
                 },
             ]
@@ -55,7 +59,7 @@ export class Editor {
                 const el = document.createElement('button');
                 el.classList.add('toolbar__button');
                 el.classList.add(_.name);
-                el.appendChild(document.createTextNode(_.name[0].toUpperCase() + _.name.slice(1)));
+                el.appendChild(document.createTextNode(_.name));
                 div.appendChild(el);
             });
         });
@@ -63,7 +67,16 @@ export class Editor {
         this.contentEl = document.querySelector('.content');
         this.contentEl.contentEditable = true;
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
-        this.contentEl.addEventListener('keydown', this.keyHandler.bind(this), false);
+        this.contentEl.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) return;
+            this.isDirty = true;
+        });
+        window.addEventListener('beforeunload', (e) => {
+            if (this.isDirty) {
+                e.preventDefault();
+                return false;
+            }
+        });
         this.initEventHandlers();
     }
 
@@ -75,13 +88,6 @@ export class Editor {
         }
     }
 
-    keyHandler(event) {
-        if (event.code === 'KeyS' && event.metaKey) {
-            event.preventDefault();
-            this.saveArticle(() => { this.showNotification('Document saved'); });
-        }
-    }
-
     showNotification(message) {
         const event = new CustomEvent('documentsave', { detail: message });
         window.dispatchEvent(event);
@@ -90,6 +96,7 @@ export class Editor {
     documentClickHandler(event) {
         if (event.target.tagName == 'A') {
             this.saveArticle(() => {
+                this.isDirty = false;
                 window.location = event.target.getAttribute('href').toString();
             });
         }
