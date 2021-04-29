@@ -1,6 +1,7 @@
 export class Editor {
     constructor() {
         this.isDirty = false;
+        this.editable = true;
         this.buttonGroups = [
             // styles
             [
@@ -63,9 +64,16 @@ export class Editor {
                 div.appendChild(el);
             });
         });
-        document.querySelector('.toolbar').appendChild(fragment);
+        const toolbar = document.querySelector('.toolbar');
+        toolbar.appendChild(fragment);
+        const readonlyButton = document.createElement('button');
+        readonlyButton.classList.add('toolbar_button');
+        readonlyButton.classList.add('toolbar_button--static');
+        readonlyButton.appendChild(document.createTextNode('Read only'));
+        toolbar.appendChild(readonlyButton);
+        readonlyButton.addEventListener('click', this.toggleEditable.bind(this));
         this.contentEl = document.querySelector('.content');
-        this.contentEl.contentEditable = true;
+        this.contentEl.contentEditable = this.editable;
         this.contentEl.addEventListener('click', this.documentClickHandler.bind(this));
         this.contentEl.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) return;
@@ -78,6 +86,12 @@ export class Editor {
             }
         });
         this.initEventHandlers();
+    }
+
+    toggleEditable() {
+        this.editable = !this.editable;
+        this.contentEl.contentEditable = this.editable;
+        document.querySelector('.toolbar').classList.toggle('toolbar--hidden');
     }
 
     setStyle(style) {
@@ -169,6 +183,7 @@ export class Editor {
             el.setAttribute('href', `/${selectedText}`);
             range.surroundContents(el);
         }
+        this.isDirty = true;
     }
 
     setInlineStyle(tagName) {
@@ -178,6 +193,7 @@ export class Editor {
         const range = selection.getRangeAt(0);
         const el = document.createElement(tagName);
         range.surroundContents(el);
+        this.isDirty = true;
     }
 
     setBlockStyle(tagName) {
@@ -195,6 +211,7 @@ export class Editor {
         range.collapse(true);
         selection.removeAllRanges();
         selection.addRange(range);
+        this.isDirty = true;
     }
 
     getMethod() {
